@@ -30,10 +30,6 @@ public class Schedule {
 
     private LocalDate date;
 
-    @Transient
-    private Duration hoursWorked;
-    @PostLoad
-    private void calculateHoursWorked() {
-        this.hoursWorked = Duration.between(startShift, endShift);
-    }
+    private Duration totalHours;
+
 }

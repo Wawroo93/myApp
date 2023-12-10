@@ -2,8 +2,8 @@ package pl.dominikwawrzyn.recipeBar;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dominikwawrzyn.category.Category;
 import pl.dominikwawrzyn.employee.Employee;
-import pl.dominikwawrzyn.recipeBarCategory.CategoryBar;
 
 @Entity
 @Getter
@@ -21,8 +21,6 @@ public class RecipeBar {
 
     private String ingredients;
 
-    private String preparationTime;
-
     private String preparation;
 
     @ManyToOne
@@ -31,6 +29,6 @@ public class RecipeBar {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private CategoryBar categoryBar;
+    private Category category;
 
 }

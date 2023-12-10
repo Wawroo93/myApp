@@ -38,10 +38,32 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/app-recipes.html}">
-                    <span>Przepisy</span>
+                <a class="nav-link" th:href="@{/app-schedules.html}">
+                    <span>Grafik</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="collapse"
+                   data-target="#collapseOne" aria-expanded="false">
+                    <span>Receptury</span>
+                </a>
+                <div id="collapseOne" class="collapse" aria-labelledby="navbarDropdown">
+                    <ul class="nav flex-column long-bg">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/category/listBar}">
+                                <span>Bar</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/category/listKitchen}">
+                                <span>Kuchnia</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/app-schedules.html}">
@@ -68,45 +90,47 @@
                 </a>
             </li>
         </ul>
-        <div class="m-4 p-3 width-medium">
-            <div class="m-4 p-3 border-dashed view-height">
 
-                <div class="row border-bottom border-3 p-1 m-1">
-                    <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">LISTA PRACOWNIKÓW</h3>
-                    </div>
-                    <div class="col d-flex justify-content-end mb-2 noPadding">
-                        <a th:href="@{/admin/employee/add}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj pracownika</a>
-                    </div>
-                </div>
 
-                <div class="schedules-content">
-                    <table class="table">
-                        <thead>
+        <div class="m-4 p-3 width-medium text-color-darker">
+            <div class="dashboard-content border-dashed p-3 m-4 view-height">
+                <div class="mt-4 ml-4 mr-4">
+                    <div class="row border-bottom border-3">
+                        <div class="col"><h3 class="color-header text-uppercase">Szczegóły receptury</h3></div>
+                        <div class="col d-flex justify-content-end mb-2">
+                            <a th:href="@{'/admin/recipeBar/' + ${recipeBar.category.id}}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4 ml-2">Powrót</a>
+                        </div>
+                    </div>
+
+                    <table class="table borderless">
+                        <tbody>
                         <tr class="d-flex">
-                            <th class="col-1">ID</th>
-                            <th class="col-2">IMIĘ</th>
-                            <th class="col-3">NAZWISKO</th>
-                            <th class="col-4">NR TELEFONU</th>
-                            <th class="col-2 center">AKCJE</th>
-                        </tr>
-                        </thead>
-                        <tbody class="text-color-lighter">
-                        <tr th:each="employee : ${employees}" class="d-flex">
-                            <td class="col-1" th:text="${employee.id}"></td>
-                            <td class="col-2" th:text="${employee.firstName}"></td>
-                            <td class="col-3" th:text="${employee.lastName}"></td>
-                            <td class="col-4" th:text="${employee.phoneNumber}"></td>
-                            <td class="col-2 center">
-                                <a th:href="@{/admin/employee/details/{id}(id=${employee.id})}" class="btn btn-danger rounded-0 text-light m-1">Szczegóły</a>
-                            </td>
+                            <th scope="row" class="col-2">Nazwa receptury</th>
+                            <td class="col-7" th:text="${recipeBar.name}"></td>
                         </tr>
                         </tbody>
                     </table>
+                    <br/>
 
+                    <div class="row d-flex">
+                        <div class="col-5 border-bottom border-3"><h3 class="text-uppercase">Sposób przygotowania</h3></div>
+                        <div class="col-2"></div>
+                        <div class="col-5 border-bottom border-3"><h3 class="text-uppercase">Składniki</h3></div>
+                    </div>
+                    <div class="row d-flex">
+                        <div class="col-5 p-4">
+                            <p th:text="${recipeBar.preparation}"></p>
+                        </div>
+                        <div class="col-2"></div>
+
+                        <div class="col-5 p-4">
+                            <p th:text="${recipeBar.ingredients}"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 </section>
@@ -120,5 +144,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+
 </body>
 </html>

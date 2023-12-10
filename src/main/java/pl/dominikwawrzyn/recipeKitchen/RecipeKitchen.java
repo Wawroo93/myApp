@@ -2,8 +2,8 @@ package pl.dominikwawrzyn.recipeKitchen;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dominikwawrzyn.category.Category;
 import pl.dominikwawrzyn.employee.Employee;
-import pl.dominikwawrzyn.recipeKitchenCategory.CategoryKitchen;
 
 @Entity
 @Getter
@@ -31,5 +31,5 @@ public class RecipeKitchen {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private CategoryKitchen categoryKitchen;
+    private Category category;
 }

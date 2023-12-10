@@ -92,27 +92,72 @@
         </ul>
 
 
-        <div class="m-4 p-3 width-medium">
+        <div class="m-4 p-3 width-medium border-dashed">
             <div class="m-4 p-3 border-dashed view-height">
-
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">CZAT</h3>
+                        <h3 class="color-header text-uppercase">Dane pracownika</h3>
+                    </div>
+                    <div class="col d-flex justify-content-end mb-2 noPadding">
+                        <a th:href="@{/admin/employee/edit/{id}(id=${employee.id})}" class="btn btn-warning rounded-0 pt-0 pb-0 pr-4 pl-4 mr-2">Edytuj</a>
+                        <a th:href="@{/admin/employee/delete/{id}(id=${employee.id})}" class="btn btn-danger rounded-0 pt-0 pb-0 pr-4 pl-4 mr-2" onclick="return confirm('Czy na pewno chcesz usunąć tego pracownika?')">Usuń</a>
+                        <a th:href="@{/admin/employee/list}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
                     </div>
                 </div>
-
-                <div class="chat-content">
-                    <div id="chatArea" class="chat-area">
-                        <!-- Chat messages will be inserted here dynamically -->
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Enter message">
-                        <button id="sendButton">Send</button>
-                    </div>
+                <div class="schedules-content">
+                    <table class="table">
+                        <tr class="d-flex">
+                            <th class="col-2">Imię</th>
+                            <td class="col-4" th:text="${employee.firstName}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Nazwisko</th>
+                            <td class="col-4" th:text="${employee.lastName}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Numer telefonu</th>
+                            <td class="col-4" th:text="${employee.phoneNumber}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Pesel</th>
+                            <td class="col-4" th:text="${employee.pesel}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Adres</th>
+                            <td class="col-4" th:text="${employee.address}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Miasto</th>
+                            <td class="col-4" th:text="${employee.city}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Email</th>
+                            <td class="col-4" th:text="${employee.email}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Hasło</th>
+                            <td class="col-4" th:text="${employee.password}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Pracownik bar</th>
+                            <td class="col-4" th:text="${employee.barStaff}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Pracownik kuchnia</th>
+                            <td class="col-4" th:text="${employee.kitchenStaff}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Typ umowy</th>
+                            <td class="col-4" th:text="${employee.contractType}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Badania sanitarno epidemiczne</th>
+                            <td class="col-4" th:text="${employee.sanitaryEpidemiologicalStudy}"></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-
 
     </div>
 </section>
@@ -126,6 +171,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
-
 </body>
 </html>

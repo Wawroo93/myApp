@@ -1,7 +1,8 @@
-package pl.dominikwawrzyn.recipeKitchenCategory;
+package pl.dominikwawrzyn.category;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dominikwawrzyn.recipeBar.RecipeBar;
 import pl.dominikwawrzyn.recipeKitchen.RecipeKitchen;
 
 import java.util.List;
@@ -12,14 +13,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categoryKitchen")
-public class CategoryKitchen {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "categoryKitchen")
+    private String type;
+
+    @OneToMany(mappedBy = "category")
+    private List<RecipeBar> recipeBars;
+
+    @OneToMany(mappedBy = "category")
     private List<RecipeKitchen> recipeKitchens;
 }

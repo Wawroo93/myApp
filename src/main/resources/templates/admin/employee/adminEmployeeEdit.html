@@ -38,10 +38,32 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/app-recipes.html}">
-                    <span>Przepisy</span>
+                <a class="nav-link" th:href="@{/app-schedules.html}">
+                    <span>Grafik</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="collapse"
+                   data-target="#collapseOne" aria-expanded="false">
+                    <span>Receptury</span>
+                </a>
+                <div id="collapseOne" class="collapse" aria-labelledby="navbarDropdown">
+                    <ul class="nav flex-column long-bg">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/category/listBar}">
+                                <span>Bar</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/category/listKitchen}">
+                                <span>Kuchnia</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/app-schedules.html}">
@@ -68,71 +90,81 @@
                 </a>
             </li>
         </ul>
+
+
         <div class="m-4 p-3 width-medium border-dashed">
             <div class="m-4 p-3 border-dashed view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">Dodawanie pracownika</h3>
+                        <h3 class="color-header text-uppercase">Edycja danych pracownika</h3>
                     </div>
                     <div class="col d-flex justify-content-end mb-2 noPadding">
-                        <a th:href="@{/admin/employee/list}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
+                        <a th:href="@{/admin/employee/details/{id}(id=${employee.id})}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
                     </div>
                 </div>
-                <form th:action="@{/admin/employee/add}" th:object="${employee}" method="post">
+                <form th:action="@{/admin/employee/edit/{id}(id=${employee.id})}" th:object="${employee}" method="post">
                     <div class="schedules-content">
                         <table class="table">
                             <tr class="d-flex">
                                 <th class="col-2">Imię</th>
                                 <td class="col-4">
-                                    <input type="text" id="firstName" th:field="*{firstName}" class="form-control"/>
+                                    <input type="text" th:field="*{firstName}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{firstName}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Nazwisko</th>
                                 <td class="col-4">
-                                    <input type="text" id="lastName" th:field="*{lastName}" class="form-control"/>
+                                    <input type="text" th:field="*{lastName}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{lastName}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Numer telefonu</th>
                                 <td class="col-4">
-                                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control"/>
+                                    <input type="text" th:field="*{phoneNumber}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{phoneNumber}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Pesel</th>
                                 <td class="col-4">
-                                    <input type="text" id="pesel" th:field="*{pesel}" class="form-control"/>
+                                    <input type="text" th:field="*{pesel}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{pesel}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Adres</th>
                                 <td class="col-4">
-                                    <input type="text" id="address" th:field="*{address}" class="form-control"/>
+                                    <input type="text" th:field="*{address}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{address}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Miasto</th>
                                 <td class="col-4">
-                                    <input type="text" id="city" th:field="*{city}" class="form-control"/>
+                                    <input type="text" th:field="*{city}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{city}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Email</th>
                                 <td class="col-4">
-                                    <input type="text" id="email" th:field="*{email}" class="form-control"/>
+                                    <input type="text" th:field="*{email}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{email}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Hasło</th>
                                 <td class="col-4">
-                                    <input type="text" id="password" th:field="*{password}" class="form-control"/>
+                                    <input type="text" th:field="*{password}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{password}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Pracownik bar</th>
                                 <td class="col-4">
-                                    <select id="barStaff" th:field="*{barStaff}" class="form-control">
+                                    <select th:field="*{barStaff}" class="form-control">
                                         <option value="true">Tak</option>
                                         <option value="false">Nie</option>
                                     </select>
@@ -141,7 +173,7 @@
                             <tr class="d-flex">
                                 <th class="col-2">Pracownik kuchnia</th>
                                 <td class="col-4">
-                                    <select id="kitchenStaff" th:field="*{kitchenStaff}" class="form-control">
+                                    <select th:field="*{kitchenStaff}" class="form-control">
                                         <option value="true">Tak</option>
                                         <option value="false">Nie</option>
                                     </select>
@@ -150,13 +182,14 @@
                             <tr class="d-flex">
                                 <th class="col-2">Typ umowy</th>
                                 <td class="col-4">
-                                    <input type="text" id="contractType" th:field="*{contractType}" class="form-control"/>
+                                    <input type="text" th:field="*{contractType}" class="form-control"/>
+                                    <p class="text-danger" th:errors="*{contractType}"></p>
                                 </td>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-2">Badania sanitarno epidemiczne</th>
                                 <td class="col-4">
-                                    <select id="sanitaryEpidemiologicalStudy" th:field="*{sanitaryEpidemiologicalStudy}" class="form-control">
+                                    <select th:field="*{sanitaryEpidemiologicalStudy}" class="form-control">
                                         <option value="true">Tak</option>
                                         <option value="false">Nie</option>
                                     </select>
@@ -164,7 +197,7 @@
                             </tr>
                             <tr class="d-flex">
                                 <td class="col-4" colspan="2">
-                                    <button type="submit" class="btn btn-primary">Dodaj pracownika</button>
+                                    <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
                                 </td>
                             </tr>
                         </table>
