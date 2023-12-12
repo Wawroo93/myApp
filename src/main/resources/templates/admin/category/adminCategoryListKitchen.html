@@ -107,24 +107,32 @@
             </li>
         </ul>
 
-
         <div class="m-4 p-3 width-medium">
-            <div class="m-4 p-3 border-dashed view-height">
-
+            <div class="dashboard-content border-dashed p-3 m-4 view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">CZAT</h3>
+                        <h3 class="color-header text-uppercase">RECEPTURY KUCHNIA</h3>
+                    </div>
+                    <div class="col d-flex justify-content-end mb-2 noPadding">
+                        <a th:href="@{/admin/category/addKitchen}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj kategorię</a>
                     </div>
                 </div>
 
-                <div class="chat-content">
-                    <div id="chatArea" class="chat-area">
-                        <!-- Chat messages will be inserted here dynamically -->
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Enter message">
-                        <button id="sendButton">Send</button>
-                    </div>
+                <div class="schedules-content">
+                    <table class="table border-bottom">
+
+                        <tbody class="text-color-lighter">
+                        <tr th:each="category : ${categories}" class="d-flex">
+                            <td class="col-3">
+                                <a th:href="@{'/admin/recipeKitchen/' + ${category.id}}" th:text="${category.name}" style="font-size: 1.5em;"></a>
+                            </td>
+                            <td class="col-9 d-flex align-items-right justify-content-end flex-wrap">
+                                <a th:href="@{'/admin/category/editKitchen/' + ${category.id}}" class="btn btn-warning rounded-0 text-light m-1">Zmień nazwę</a>
+                                <a th:href="@{'/admin/category/deleteKitchen/' + ${category.id}}" class="btn btn-danger rounded-0 text-light m-1" onclick="return confirm('Czy na pewno chcesz usunąć tę kategorię?')">Usuń</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

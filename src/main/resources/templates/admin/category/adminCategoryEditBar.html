@@ -32,23 +32,23 @@
     <div class="row dashboard-nowrap">
         <ul class="nav flex-column long-bg">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/dashboard.html}">
+                <a class="nav-link" th:href="@{/admin/dashboard}">
                     <span>Pulpit</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/app-schedules.html}">
+                <a class="nav-link" th:href="@{/admin/schedule/list}">
                     <span>Grafik</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="collapse"
-                   data-target="#collapseOne" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="collapse"
+                   data-target="#collapseOne1" aria-expanded="false">
                     <span>Receptury</span>
                 </a>
-                <div id="collapseOne" class="collapse" aria-labelledby="navbarDropdown">
+                <div id="collapseOne1" class="collapse" aria-labelledby="navbarDropdown1">
                     <ul class="nav flex-column long-bg">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/admin/category/listBar}">
@@ -66,14 +66,30 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/app-schedules.html}">
-                    <span>Plany</span>
-                    <i class="fas fa-angle-right"></i>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="collapse"
+                   data-target="#collapseTwo" aria-expanded="false">
+                    <span>Magazyn</span>
                 </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="navbarDropdown2">
+                    <ul class="nav flex-column long-bg">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/category/listProductsBar}">
+                                <span>Bar</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/category/listProductsKitchen}">
+                                <span>Kuchnia</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/app-edit-user-data.html}">
-                    <span>Edytuj dane</span>
+                <a class="nav-link" th:href="@{/admin/lossReport/list}">
+                    <span>Raport strat</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
@@ -90,6 +106,7 @@
                 </a>
             </li>
         </ul>
+
 
         <div class="m-4 p-3 width-medium">
             <div class="dashboard-content border-dashed p-3 m-4 view-height">

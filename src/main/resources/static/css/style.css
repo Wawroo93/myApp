@@ -1,6 +1,12 @@
 /*------------------------------*/
 /*---- Main style ----*/
 /*------------------------------*/
+.highlight {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: black;
+    font-size: 30px;
+}
 
 :root {
     --link-color: #ff6600;

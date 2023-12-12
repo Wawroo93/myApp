@@ -1,10 +1,11 @@
 package pl.dominikwawrzyn.lossReport;
 
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,11 +19,13 @@ public class LossReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String month;
 
-    private LocalDateTime lossDateTime;
+    @Min(1900)
+    private Integer year;
 
-    private String lossDescription;
+    private Double sumCost;
 
-    private Double estimatedCost;
+    @OneToMany(mappedBy = "lossReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LossReportItem> lossReportItems;
 }

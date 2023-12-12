@@ -1,0 +1,3 @@
+jakarta.validation.constraints.NotBlank.name=Imię nie może być puste
+jakarta.validation.constraints.Size.name=Imię musi mieć mniej niż 25 znaków
+jakarta.validation.constraints.NotBlank.type=Typ jest wymagany

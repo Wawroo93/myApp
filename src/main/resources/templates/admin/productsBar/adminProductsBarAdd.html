@@ -108,24 +108,31 @@
         </ul>
 
 
-        <div class="m-4 p-3 width-medium">
-            <div class="m-4 p-3 border-dashed view-height">
+        <div class="m-4 p-3 width-medium text-color-darker">
+            <div class="dashboard-content border-dashed p-3 m-4 view-height">
+                <form th:action="@{'/admin/productsBar/add/' + ${categoryId}}" th:object="${productsBar}" method="post">
+                    <div class="mt-4 ml-4 mr-4">
+                        <div class="row border-bottom border-3">
+                            <div class="col"><h3 class="color-header text-uppercase">Nowa produkt</h3></div>
+                            <div class="col d-flex justify-content-end mb-2">
+                                <button type="submit" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj</button>
+                                <a href="/admin/category/listProductsBar" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4 ml-2">Powrót</a>
+                            </div>
+                        </div>
 
-                <div class="row border-bottom border-3 p-1 m-1">
-                    <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">CZAT</h3>
+                        <table class="table borderless">
+                            <tbody>
+                            <tr class="d-flex">
+                                <th scope="row" class="col-2">Nazwa</th>
+                                <td class="col-7">
+                                    <input name="name" class="w-100 p-1" th:field="*{name}">
+                                    <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-
-                <div class="chat-content">
-                    <div id="chatArea" class="chat-area">
-                        <!-- Chat messages will be inserted here dynamically -->
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Enter message">
-                        <button id="sendButton">Send</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
 

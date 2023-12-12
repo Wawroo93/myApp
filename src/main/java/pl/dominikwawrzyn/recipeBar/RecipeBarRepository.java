@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface RecipeBarRepository extends JpaRepository<RecipeBar, Long> {
     List<RecipeBar> findByCategoryId(Long categoryId);
+
 }

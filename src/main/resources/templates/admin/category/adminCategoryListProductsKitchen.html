@@ -109,27 +109,59 @@
 
 
         <div class="m-4 p-3 width-medium">
-            <div class="m-4 p-3 border-dashed view-height">
-
+            <div class="dashboard-content border-dashed p-3 m-4 view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">CZAT</h3>
+                        <h3 class="color-header text-uppercase">MAGAZYN KUCHNIA</h3>
+                    </div>
+                    <div class="col d-flex justify-content-end mb-2 noPadding">
+                        <a th:href="@{/admin/category/addProductsKitchen}"
+                           class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj kategorię</a>
                     </div>
                 </div>
-
-                <div class="chat-content">
-                    <div id="chatArea" class="chat-area">
-                        <!-- Chat messages will be inserted here dynamically -->
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Enter message">
-                        <button id="sendButton">Send</button>
-                    </div>
+                <div class="schedules-content">
+                    <table class="table border-bottom">
+                        <tbody>
+                        <th:block th:each="category : ${categories}">
+                            <tr>
+                                <td><span class="highlight" th:text="${category.name}"></span></td>
+                                <td></td>
+                                <td class="d-flex align-items-right justify-content-end flex-wrap">
+                                    <a th:href="@{'/admin/productsKitchen/add/' + ${category.id}}"
+                                       class="btn btn-primary rounded-0 text-light m-1">Dodaj produkt</a>
+                                    <a th:href="@{'/admin/category/editProductsKitchen/' + ${category.id}}"
+                                       class="btn btn-warning rounded-0 text-light m-1">Zmień nazwę</a>
+                                    <a th:href="@{'/admin/category/deleteProductsKitchen/' + ${category.id}}"
+                                       class="btn btn-danger rounded-0 text-light m-1"
+                                       onclick="return confirm('Czy na pewno chcesz usunąć tę kategorię?')">Usuń</a>
+                                </td>
+                            </tr>
+                            <tr th:each="product : ${category.productsKitchen}">
+                                <td>
+                                    <span th:text="${product.name}"></span>
+                                </td>
+                                <td>
+                                    <form th:action="@{'/admin/productsKitchen/updateQuantity/' + ${product.id}}"
+                                          method="post">
+                                        <input type="number" th:value="${product.quantity}" name="quantity"
+                                               onchange="this.form.submit()">
+                                    </form>
+                                </td>
+                                <td class="d-flex align-items-right justify-content-end flex-wrap">
+                                    <form th:action="@{'/admin/productsKitchen/delete/' + ${product.id}}" method="post">
+                                        <button type="submit" class="btn btn-danger rounded-0 text-light m-1"
+                                                onclick="return confirm('Czy na pewno chcesz usunąć ten produkt?')">Usuń
+                                            produkt
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
-
     </div>
 </section>
 

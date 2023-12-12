@@ -22,8 +22,11 @@ public class RecipeBarController {
     }
     @GetMapping("/{categoryId}")
     public String showRecipeBarByCategory(@PathVariable Long categoryId, Model model) {
-        List<RecipeBar> recipeBars = recipeBarRepository.findByCategoryId(categoryId);
-        model.addAttribute("recipeBars", recipeBars);
+        List<RecipeBar> recipesBar = recipeBarRepository.findByCategoryId(categoryId);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + categoryId));
+        model.addAttribute("recipesBar", recipesBar);
+        model.addAttribute("categoryName", category.getName());
         return "admin/recipeBar/adminRecipeBarList";
     }
     @GetMapping("/add/{categoryId}")

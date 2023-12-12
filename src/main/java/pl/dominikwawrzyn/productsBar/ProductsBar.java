@@ -1,9 +1,10 @@
-package pl.dominikwawrzyn.productsAvailabilityBar;
+package pl.dominikwawrzyn.productsBar;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import pl.dominikwawrzyn.productsAvailabilityBarCat.ProductsAvailabilityBarCategory;
+import pl.dominikwawrzyn.category.Category;
 
 @Entity
 @Getter
@@ -11,17 +12,18 @@ import pl.dominikwawrzyn.productsAvailabilityBarCat.ProductsAvailabilityBarCateg
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "productsAvailabilityBar")
-public class ProductsAvailabilityBar {
+@Table(name = "productsBar")
+public class ProductsBar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "nazwa nie może być pusta")
     private String name;
 
     private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private ProductsAvailabilityBarCategory productsAvailabilityBarCategory;
+    private Category category;
 }
