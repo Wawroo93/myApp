@@ -2,6 +2,9 @@ package pl.dominikwawrzyn.lossReport;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.dominikwawrzyn.employee.Employee;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,7 +24,14 @@ public class LossReportItem {
 
     private Double cost;
 
+    private Double weight;
+
+    private Integer quantity;
+
+    private LocalDate eventDate;
+
     @ManyToOne
     @JoinColumn(name = "loss_report_id")
     private LossReport lossReport;
+
 }

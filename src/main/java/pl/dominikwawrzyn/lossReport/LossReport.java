@@ -26,6 +26,13 @@ public class LossReport {
 
     private Double sumCost;
 
+
+    public Double getSumCost() {
+        return this.getLossReportItems().stream()
+                .mapToDouble(LossReportItem::getCost)
+                .sum();
+    }
+
     @OneToMany(mappedBy = "lossReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LossReportItem> lossReportItems;
 }

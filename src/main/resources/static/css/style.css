@@ -7,6 +7,14 @@
     color: black;
     font-size: 30px;
 }
+.description-cell {
+    width: 35ch;
+    word-wrap: break-word;
+    white-space: normal;
+}
+.larger-text {
+    font-size: 1.3em;
+}
 
 :root {
     --link-color: #ff6600;

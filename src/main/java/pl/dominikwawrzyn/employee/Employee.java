@@ -29,6 +29,7 @@ public class Employee {
     @NotBlank(message = "Nazwisko nie może być puste")
     private String lastName;
 
+
     @NotBlank(message = "Hasło nie może być puste")
     private String password;
 

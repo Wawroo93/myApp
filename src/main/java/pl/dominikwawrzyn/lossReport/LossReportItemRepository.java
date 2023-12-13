@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LossReportRepository extends JpaRepository<LossReport, Long> {
+public interface LossReportItemRepository extends JpaRepository<LossReportItem, Long> {
+
+    List<LossReportItem> findAllByLossReport(LossReport lossReport);
 
 }

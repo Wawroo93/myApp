@@ -1,11 +1,11 @@
 package pl.dominikwawrzyn.lossReport;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pl.dominikwawrzyn.productsBar.ProductsBar;
 
 import java.util.List;
 
@@ -13,14 +13,26 @@ import java.util.List;
 @RequestMapping("/admin/lossReport")
 public class LossReportController {
     private final LossReportRepository lossReportRepository;
+    private final LossReportItemRepository lossReportItemRepository;
 
-    public LossReportController(LossReportRepository lossReportRepository) {
+    public LossReportController(LossReportRepository lossReportRepository, LossReportItemRepository lossReportItemRepository) {
         this.lossReportRepository = lossReportRepository;
+        this.lossReportItemRepository = lossReportItemRepository;
     }
+    @GetMapping("/{id}")
+    public String getLossReportItems(@PathVariable Long id, Model model) {
+        LossReport lossReport = lossReportRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid report Id:" + id));
+        List<LossReportItem> lossReportItems = lossReportItemRepository.findAllByLossReport(lossReport);
+        model.addAttribute("lossReportItems", lossReportItems);
+        model.addAttribute("lossReport", lossReport);
+        return "admin/lossReport/adminLossReportItemList";
+    }
+
 
     @GetMapping("/list")
     public String listLossReports(Model model) {
-        List<LossReport> lossReports = lossReportRepository.findAll();
+        List<LossReport> lossReports = lossReportRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("lossReports", lossReports);
         return "admin/lossReport/adminLossReportList";
     }

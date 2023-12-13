@@ -111,24 +111,39 @@
         <div class="m-4 p-3 width-medium">
             <div class="dashboard-content border-dashed p-3 m-4 view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
-                    <div class="col noPadding"><h3 class="color-header text-uppercase">Lista raportów</h3></div>
-                    <div class="col noPadding d-flex justify-content-end mb-2"><a th:href="@{/admin/lossReport/add}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj raport</a></div>
+                    <div class="col noPadding"><h3 class="color-header text-uppercase">Dodaj stratę</h3></div>
+                    <div class="col noPadding d-flex justify-content-end mb-2">
+                        <a th:href="@{'/admin/lossReport/' + ${lossReport.id}}" class="btn btn-primary rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
+                    </div>
                 </div>
-                <table class="table border-bottom schedules-content larger-text">
-                    <tbody class="text-color-lighter">
-                    <tr class="d-flex" th:each="report : ${lossReports}">
-                        <th scope="row" class="col-1" th:text="${report.year}"></th>
-                        <td class="col-2" th:text="${report.month}"></td>
-                        <td class="col-7" th:text="${report.sumCost} + ' zł'"></td>
-                        <td class="col-2 d-flex align-items-center justify-content-end flex-wrap">
-                            <a th:href="@{'/admin/lossReport/' + ${report.id}}" class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
-                            <form th:action="@{'/admin/lossReport/delete/' + ${report.id}}" method="post">
-                                <input type="submit" value="Usuń" class="btn btn-danger rounded-0 text-light m-1" onclick="return confirm('Czy na pewno chcesz usunąć ten raport?')">
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form th:action="@{'/admin/lossReportItem/add/' + ${lossReport.id}}" th:object="${lossReportItem}" method="post">
+                    <input type="hidden" th:field="*{lossReport.id}">
+                    <div class="form-group">
+                        <label for="name">Nazwa</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Opis</label>
+                        <input type="text" class="form-control" id="description" th:field="*{description}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">Koszt</label>
+                        <input type="number" class="form-control" id="cost" th:field="*{cost}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDate">Data zdarzenia</label>
+                        <input type="date" class="form-control" id="eventDate" th:field="*{eventDate}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Waga</label>
+                        <input type="number" class="form-control" id="weight" th:field="*{weight}">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Ilość</label>
+                        <input type="number" class="form-control" id="quantity" th:field="*{quantity}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                </form>
             </div>
         </div>
 
