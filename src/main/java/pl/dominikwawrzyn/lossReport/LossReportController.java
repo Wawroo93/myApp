@@ -29,7 +29,6 @@ public class LossReportController {
         return "admin/lossReport/adminLossReportItemList";
     }
 
-
     @GetMapping("/list")
     public String listLossReports(Model model) {
         List<LossReport> lossReports = lossReportRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));

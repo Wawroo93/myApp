@@ -46,7 +46,6 @@ public class LossReportItemController {
         lossReportItemRepository.delete(lossReportItem);
         return "redirect:/admin/lossReport/" + reportId;
     }
-    // In LossReportItemController.java
 
     @GetMapping("/edit/{itemId}")
     public String showEditForm(@PathVariable Long itemId, Model model) {

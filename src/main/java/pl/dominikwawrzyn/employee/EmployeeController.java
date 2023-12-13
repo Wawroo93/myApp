@@ -88,11 +88,7 @@ public class EmployeeController {
         if (result.hasErrors()) {
             return "admin/employee/adminEmployeeAdd";
         }
-        Employee savedEmployee = employeeRepository.save(employee);
-        Schedule schedule = new Schedule();
-        schedule.setEmployee(savedEmployee);
-
-        scheduleRepository.save(schedule);
+        employeeRepository.save(employee);
         return "redirect:/admin/employee/list";
     }
 
