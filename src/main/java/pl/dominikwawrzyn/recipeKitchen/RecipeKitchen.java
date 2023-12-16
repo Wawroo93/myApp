@@ -1,6 +1,6 @@
 package pl.dominikwawrzyn.recipeKitchen;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import pl.dominikwawrzyn.category.Category;
 import pl.dominikwawrzyn.employee.Employee;

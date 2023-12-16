@@ -2,11 +2,13 @@ package pl.dominikwawrzyn;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
-    @GetMapping("/admin/dashboard")
+    @GetMapping("/dashboard")
     public String adminDashboard() {
         // Tutaj możesz dodać logikę, która ma być wykonana przed wyświetleniem strony adminDashboard
 

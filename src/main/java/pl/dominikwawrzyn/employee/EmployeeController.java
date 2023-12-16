@@ -1,6 +1,7 @@
 package pl.dominikwawrzyn.employee;
 
-import jakarta.validation.Valid;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.dominikwawrzyn.schedule.Schedule;
 import pl.dominikwawrzyn.schedule.ScheduleRepository;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -20,13 +22,18 @@ public class EmployeeController {
 
     private final EmployeeRepository employeeRepository;
 
-
     private final ScheduleRepository scheduleRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public EmployeeController(EmployeeRepository employeeRepository, ScheduleRepository scheduleRepository) {
+    public EmployeeController(EmployeeRepository employeeRepository, ScheduleRepository scheduleRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.employeeRepository = employeeRepository;
         this.scheduleRepository = scheduleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping("/list")
@@ -83,11 +90,18 @@ public class EmployeeController {
         return "admin/employee/adminEmployeeAdd";
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/add")
     public String addEmployee(@Valid Employee employee, BindingResult result) {
         if (result.hasErrors()) {
             return "admin/employee/adminEmployeeAdd";
         }
+        String encodedPassword = passwordEncoder.encode(employee.getPassword());
+        employee.setPassword(encodedPassword);
+
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        employee.getRoles().add(userRole);
+
         employeeRepository.save(employee);
         return "redirect:/admin/employee/list";
     }
@@ -96,6 +110,12 @@ public class EmployeeController {
     public String deleteEmployee(@PathVariable Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Niepoprawne id pracownika: " + id));
+
+        List<Schedule> schedules = scheduleRepository.findAllByEmployeeId(id);
+        for (Schedule schedule : schedules) {
+            scheduleRepository.delete(schedule);
+        }
+
         employeeRepository.delete(employee);
         return "redirect:/admin/employee/list";
     }

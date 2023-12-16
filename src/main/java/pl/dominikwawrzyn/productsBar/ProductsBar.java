@@ -1,8 +1,7 @@
 package pl.dominikwawrzyn.productsBar;
 
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
+import javax.persistence.*;
 import lombok.*;
 import pl.dominikwawrzyn.category.Category;
 

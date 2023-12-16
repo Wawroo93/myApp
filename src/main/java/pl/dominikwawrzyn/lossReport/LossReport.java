@@ -1,10 +1,11 @@
 package pl.dominikwawrzyn.lossReport;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
+
+
 import lombok.*;
 
+import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Entity

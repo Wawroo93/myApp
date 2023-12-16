@@ -94,7 +94,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/admin/changePassword}">
+                <a class="nav-link disabled" th:href="@{/app-edit-password.html}">
                     <span>Zmień hasło</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
@@ -106,29 +106,47 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Wyloguj"/>
-        </form>
 
 
         <div class="m-4 p-3 width-medium">
-            <div class="m-4 p-3 border-dashed view-height">
-
+            <div class="dashboard-content border-dashed p-3 m-4 view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
-                    <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">CZAT</h3>
+                    <div class="col noPadding d-flex justify-content-between align-items-center">
+                        <h3 class="color-header text-uppercase">Grafik</h3>
+                        <div>
+                            <button type="submit" form="scheduleFormThisMonth" class="btn btn-primary mr-2">Zapisz zmiany</button>
+                            <a href="/admin/schedule/listThisMonth" class="btn btn-secondary ">Powrót</a>
+                        </div>
                     </div>
                 </div>
-
-                <div class="chat-content">
-                    <div id="chatArea" class="chat-area">
-                        <!-- Chat messages will be inserted here dynamically -->
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Enter message">
-                        <button id="sendButton">Send</button>
-                    </div>
-                </div>
+                <form id="scheduleFormThisMonth" th:action="@{/admin/schedule/saveThisMonth}" method="post" th:object="${scheduleForm}">
+                    <table class="table border-bottom schedules-content">
+                        <thead>
+                        <tr>
+                            <th scope="col">Dzień</th>
+                            <th th:each="employee : ${employees}"
+                                th:text="${#strings.substring(employee.firstName, 0, 1) + '. ' + employee.lastName}"
+                                scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-color-lighter">
+                        <tr th:each="day : ${days}">
+                            <td th:text="${day}"></td>
+                            <td th:each="employee : ${employees}">
+                                <div th:each="schedule, i : ${schedules}"
+                                     th:if="${schedule.day == (day) && schedule.employee == (employee)}">
+                                    <input type="hidden" th:value="${schedule.id}"
+                                           th:field="*{schedules[__${i.index}__].id}">
+                                    <input type="text" th:value="${schedule.startTime}"
+                                           th:field="*{schedules[__${i.index}__].startTime}" size="3">
+                                    <input type="text" th:value="${schedule.endTime}"
+                                           th:field="*{schedules[__${i.index}__].endTime}" size="3">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
 
@@ -145,6 +163,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
-
 </body>
 </html>

@@ -124,7 +124,7 @@
                     </thead>
                     <tbody class="text-color-lighter">
                     <tr th:each="day : ${days}">
-                        <td th:text="${day}"></td>
+                        <td th:text="${day}" th:style="${day.dayOfWeek == T(java.time.DayOfWeek).MONDAY ? 'color: red' : ''}"></td>
                         <td th:each="employee : ${employees}">
                             <span th:each="schedule : ${schedules}" th:if="${schedule.day == (day) && schedule.employee == (employee)}" th:text="${schedule.startTime} + ' - ' + ${schedule.endTime}"></span>
                         </td>

@@ -18,12 +18,15 @@
 <body>
 <header class="page-header">
     <nav class="navbar navbar-expand-lg justify-content-between">
-        <a th:href="@{/admin/dashboard}" class="navbar-brand main-logo main-logo-smaller">
+        <a th:href="@{/user/dashboard}" class="navbar-brand main-logo main-logo-smaller">
             My <span>App</span>
         </a>
         <div class="d-flex justify-content-around">
-            <h4 class="text-light mr-3">Imię</h4>
+            <h4 class="text-light mr-3" th:text="${username}"></h4>
             <div class="circle-div text-center"><i class="fas fa-user icon-user"></i></div>
+            <form th:action="@{/logout}" method="post" class="ml-3">
+                <input type="submit" value="Wyloguj" class="btn btn-primary"/>
+            </form>
         </div>
     </nav>
 </header>
@@ -32,13 +35,13 @@
     <div class="row dashboard-nowrap">
         <ul class="nav flex-column long-bg">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/admin/dashboard}">
+                <a class="nav-link" th:href="@{/user/dashboard}">
                     <span>Pulpit</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/admin/schedule/list}">
+                <a class="nav-link" th:href="@{/user/schedule/list}">
                     <span>Grafik</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
@@ -51,13 +54,13 @@
                 <div id="collapseOne1" class="collapse" aria-labelledby="navbarDropdown1">
                     <ul class="nav flex-column long-bg">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/category/listBar}">
+                            <a class="nav-link" th:href="@{/user/category/listBar}">
                                 <span>Bar</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/category/listKitchen}">
+                            <a class="nav-link" th:href="@{/user/category/listKitchen}">
                                 <span>Kuchnia</span>
                                 <i class="fas fa-angle-right"></i>
                             </a>
@@ -66,67 +69,58 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="collapse"
-                   data-target="#collapseTwo" aria-expanded="false">
-                    <span>Magazyn</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="navbarDropdown2">
-                    <ul class="nav flex-column long-bg">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/category/listProductsBar}">
-                                <span>Bar</span>
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/category/listProductsKitchen}">
-                                <span>Kuchnia</span>
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/admin/lossReport/list}">
-                    <span>Raport strat</span>
-                    <i class="fas fa-angle-right"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/admin/changePassword}">
+                <a class="nav-link disabled" th:href="@{/user/changePassword}">
                     <span>Zmień hasło</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/admin/employee/list}">
+                <a class="nav-link" th:href="@{/user/employee/list}">
                     <span>Użytkownicy</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
         </ul>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Wyloguj"/>
-        </form>
 
 
-        <div class="m-4 p-3 width-medium">
-            <div class="m-4 p-3 border-dashed view-height">
-
-                <div class="row border-bottom border-3 p-1 m-1">
-                    <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">CZAT</h3>
+        <div class="m-4 p-3 width-medium text-color-darker">
+            <div class="dashboard-content border-dashed p-3 m-4 view-height">
+                <div class="mt-4 ml-4 mr-4">
+                    <div class="row border-bottom border-3">
+                        <div class="col"><h3 class="color-header text-uppercase">Szczegóły receptury</h3></div>
+                        <div class="col d-flex justify-content-end mb-2">
+                            <a th:href="@{'/user/recipeKitchen/' + ${recipeKitchen.category.id}}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4 ml-2">Powrót</a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="chat-content">
-                    <div id="chatArea" class="chat-area">
-                        <!-- Chat messages will be inserted here dynamically -->
+                    <table class="table borderless">
+                        <tbody>
+                        <tr class="d-flex">
+                            <th scope="row" class="col-2">Nazwa receptury</th>
+                            <td class="col-7" th:text="${recipeKitchen.name}"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th scope="row" class="col-2">Przygotowanie (minuty)</th>
+                            <td class="col-7" th:text="*{recipeKitchen.preparationTime}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+
+                    <div class="row d-flex">
+                        <div class="col-5 border-bottom border-3"><h3 class="text-uppercase">Sposób przygotowania</h3></div>
+                        <div class="col-2"></div>
+                        <div class="col-5 border-bottom border-3"><h3 class="text-uppercase">Składniki</h3></div>
                     </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Enter message">
-                        <button id="sendButton">Send</button>
+                    <div class="row d-flex">
+                        <div class="col-5 p-4">
+                            <p th:text="${recipeKitchen.preparation}"></p>
+                        </div>
+                        <div class="col-2"></div>
+
+                        <div class="col-5 p-4">
+                            <p th:text="${recipeKitchen.ingredients}"></p>
+                        </div>
                     </div>
                 </div>
             </div>

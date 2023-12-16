@@ -1,8 +1,8 @@
 package pl.dominikwawrzyn.lossReport;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
-import pl.dominikwawrzyn.employee.Employee;
+
 
 import java.time.LocalDate;
 

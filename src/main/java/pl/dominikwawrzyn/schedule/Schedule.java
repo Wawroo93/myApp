@@ -1,13 +1,9 @@
 package pl.dominikwawrzyn.schedule;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import pl.dominikwawrzyn.employee.Employee;
-
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter

@@ -1,15 +1,20 @@
 package pl.dominikwawrzyn.employee;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+
+
 import lombok.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.dominikwawrzyn.recipeBar.RecipeBar;
 import pl.dominikwawrzyn.recipeKitchen.RecipeKitchen;
 import pl.dominikwawrzyn.schedule.Schedule;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,7 +33,6 @@ public class Employee {
 
     @NotBlank(message = "Nazwisko nie może być puste")
     private String lastName;
-
 
     @NotBlank(message = "Hasło nie może być puste")
     private String password;
@@ -59,7 +63,18 @@ public class Employee {
 
     private Boolean kitchenStaff;
 
-    private Boolean admin;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "employee_roles",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public boolean isAdmin() {
+        return roles.stream()
+                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+    }
 
     @OneToMany(mappedBy = "employee")
     private List<Schedule> schedules;
@@ -69,4 +84,10 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     private List<RecipeKitchen> recipesKitchen;
+
+//    @PrePersist
+//    @PreUpdate
+//    public void encodePassword() {
+//        this.password = new BCryptPasswordEncoder().encode(this.password);
+//    }
 }

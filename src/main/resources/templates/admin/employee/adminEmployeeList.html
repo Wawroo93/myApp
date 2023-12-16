@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="utf-8">
@@ -115,8 +116,9 @@
                     <div class="col noPadding">
                         <h3 class="color-header text-uppercase">LISTA PRACOWNIKÓW</h3>
                     </div>
-                    <div class="col d-flex justify-content-end mb-2 noPadding">
-                        <a th:href="@{/admin/employee/add}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj pracownika</a>
+                    <div class="col d-flex justify-content-end mb-2 noPadding" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/admin/employee/add}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj
+                            pracownika</a>
                     </div>
                 </div>
 
@@ -138,7 +140,8 @@
                             <td class="col-3" th:text="${employee.lastName}"></td>
                             <td class="col-4" th:text="${employee.phoneNumber}"></td>
                             <td class="col-2 center">
-                                <a th:href="@{/admin/employee/details/{id}(id=${employee.id})}" class="btn btn-danger rounded-0 text-light m-1">Szczegóły</a>
+                                <a th:href="@{/admin/employee/details/{id}(id=${employee.id})}"
+                                   class="btn btn-danger rounded-0 text-light m-1">Szczegóły</a>
                             </td>
                         </tr>
                         </tbody>

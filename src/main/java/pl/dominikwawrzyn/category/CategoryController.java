@@ -1,6 +1,6 @@
 package pl.dominikwawrzyn.category;
 
-import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -11,6 +11,7 @@ import pl.dominikwawrzyn.productsBar.ProductsBarRepository;
 import pl.dominikwawrzyn.productsKitchen.ProductsKitchen;
 import pl.dominikwawrzyn.productsKitchen.ProductsKitchenRepository;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
