@@ -124,7 +124,6 @@
                             <a th:href="@{'/admin/recipeBar/details/' + ${recipeBar.id}}" th:text="${recipeBar.name}" style="font-size: 1.5em;"></a>
                         </th>
                         <td class="col-9 d-flex align-items-right justify-content-end flex-wrap">
-                            <a th:href="@{'/admin/recipeBar/edit/' + ${recipeBar.id}}" class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>
                             <a th:href="@{'/admin/recipeBar/delete/' + ${recipeBar.id}}" onclick="return confirm('Czy na pewno chcesz usunąć tę recepturę')" class="btn btn-danger rounded-0 text-light m-1">Usuń</a>
                         </td>
                     </tr>

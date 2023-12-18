@@ -35,9 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Secured("ROLE_ADMIN")
     @Override
     public Employee saveEmployee(Employee employee) {
-        Role userRole = roleRepository.findByName("ROLE_USER");
-        employee.getRoles().add(userRole);
-        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+//        Role userRole = roleRepository.findByName("ROLE_USER");
+//        employee.getRoles().add(userRole);
+//        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         return employeeRepository.save(employee);
     }
 

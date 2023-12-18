@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.dominikwawrzyn.category.Category;
 import pl.dominikwawrzyn.category.CategoryRepository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -60,14 +61,21 @@ public class RecipeBarController {
         existingRecipeBar.setName(updatedRecipeBar.getName());
         existingRecipeBar.setIngredients(updatedRecipeBar.getIngredients());
         existingRecipeBar.setPreparation(updatedRecipeBar.getPreparation());
-        recipeBarRepository.save(existingRecipeBar);
-        return "redirect:/admin/recipeBar/" + existingRecipeBar.getCategory().getId();
+        RecipeBar savedRecipeBar = recipeBarRepository.save(existingRecipeBar);
+        return "redirect:/admin/recipeBar/details/" + savedRecipeBar.getId();
     }
     @GetMapping("/details/{id}")
     public String showRecipeBarDetails(@PathVariable Long id, Model model) {
         RecipeBar recipeBar = recipeBarRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid RecipeBar Id:" + id));
         model.addAttribute("recipeBar", recipeBar);
+
+        List<String> ingredients = Arrays.asList(recipeBar.getIngredients().split(","));
+        model.addAttribute("ingredients", ingredients);
+
+        List<String> preparationSteps = Arrays.asList(recipeBar.getPreparation().split("\\."));
+        model.addAttribute("preparationSteps", preparationSteps);
+
         return "admin/recipeBar/adminRecipeBarDetails";
     }
     @GetMapping("/delete/{id}")

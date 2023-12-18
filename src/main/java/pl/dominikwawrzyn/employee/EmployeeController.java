@@ -1,5 +1,7 @@
 package pl.dominikwawrzyn.employee;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
@@ -14,7 +16,10 @@ import pl.dominikwawrzyn.schedule.Schedule;
 import pl.dominikwawrzyn.schedule.ScheduleRepository;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.ErrorManager;
 
 @Controller
 @RequestMapping("/admin/employee")
@@ -27,6 +32,7 @@ public class EmployeeController {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
     @Autowired
     public EmployeeController(EmployeeRepository employeeRepository, ScheduleRepository scheduleRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
@@ -56,33 +62,48 @@ public class EmployeeController {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Niepoprawne id pracownika: " + id));
         model.addAttribute("employee", employee);
+
+        List<Role> allRoles = roleRepository.findAll();
+        model.addAttribute("allRoles", allRoles);
+
         return "admin/employee/adminEmployeeEdit";
     }
 
     @PostMapping("/edit/{id}")
     public String updateEmployee(@PathVariable Long id, @Valid Employee employee, BindingResult result) {
         if (result.hasErrors()) {
+            logger.error("Validation errors occurred while updating employee: {}", result.getAllErrors());
             return "admin/employee/adminEmployeeEdit";
         }
         employeeRepository.findById(id)
-                .map(employees -> {
-                    employee.setFirstName(employee.getFirstName());
-                    employee.setLastName(employee.getLastName());
-                    employee.setPhoneNumber(employee.getPhoneNumber());
-                    employee.setAddress(employee.getAddress());
-                    employee.setCity(employee.getCity());
-                    employee.setPesel(employee.getPesel());
-                    employee.setEmail(employee.getEmail());
-                    employee.setPassword(employee.getPassword());
-                    employee.setBarStaff(employee.getBarStaff());
-                    employee.setKitchenStaff(employee.getKitchenStaff());
-                    employee.setContractType(employee.getContractType());
-                    employee.setSanitaryEpidemiologicalStudy(employee.getSanitaryEpidemiologicalStudy());
-                    return employeeRepository.save(employee);
+                .map(existingEmployee -> {
+                    existingEmployee.setFirstName(employee.getFirstName());
+                    existingEmployee.setLastName(employee.getLastName());
+                    existingEmployee.setPhoneNumber(employee.getPhoneNumber());
+                    existingEmployee.setAddress(employee.getAddress());
+                    existingEmployee.setCity(employee.getCity());
+                    existingEmployee.setPesel(employee.getPesel());
+                    existingEmployee.setPassword(employee.getPassword());
+                    existingEmployee.setEmail(employee.getEmail());
+                    existingEmployee.setBarStaff(employee.getBarStaff());
+                    existingEmployee.setKitchenStaff(employee.getKitchenStaff());
+                    existingEmployee.setContractType(employee.getContractType());
+                    existingEmployee.setSanitaryEpidemiologicalStudy(employee.getSanitaryEpidemiologicalStudy());
+
+                    Set<Role> roles = new HashSet<>();
+                    for (Role role : employee.getRoles()) {
+                        Role existingRole = roleRepository.findById(role.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("Niepoprawne id roli: " + role.getId()));
+                        roles.add(existingRole);
+                    }
+                    existingEmployee.setRoles(roles);
+
+                    return employeeRepository.save(existingEmployee);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Niepoprawne id pracownika: " + id));
         return "redirect:/admin/employee/details/" + id;
     }
+
 
     @GetMapping("/add")
     public String showAdd(Model model) {
@@ -90,7 +111,7 @@ public class EmployeeController {
         return "admin/employee/adminEmployeeAdd";
     }
 
-    @Secured("ROLE_ADMIN")
+
     @PostMapping("/add")
     public String addEmployee(@Valid Employee employee, BindingResult result) {
         if (result.hasErrors()) {

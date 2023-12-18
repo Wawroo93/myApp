@@ -4,6 +4,7 @@ package pl.dominikwawrzyn.employee;
 
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import pl.dominikwawrzyn.dashboard.Message;
 import pl.dominikwawrzyn.recipeBar.RecipeBar;
 import pl.dominikwawrzyn.recipeKitchen.RecipeKitchen;
 import pl.dominikwawrzyn.schedule.Schedule;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,6 +65,9 @@ public class Employee {
 
     private Boolean kitchenStaff;
 
+    @ManyToMany(mappedBy = "readByEmployees")
+    private List<Message> readMessages = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_roles",
@@ -85,9 +90,4 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<RecipeKitchen> recipesKitchen;
 
-//    @PrePersist
-//    @PreUpdate
-//    public void encodePassword() {
-//        this.password = new BCryptPasswordEncoder().encode(this.password);
-//    }
 }

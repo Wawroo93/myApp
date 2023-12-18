@@ -112,7 +112,7 @@
             <div class="m-4 p-3 border-dashed view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">Edycja danych pracownika</h3>
+                        <h3 class="color-header text-uppercase">Edycja użytkownika</h3>
                     </div>
                     <div class="col d-flex justify-content-end mb-2 noPadding">
                         <a th:href="@{/admin/employee/details/{id}(id=${employee.id})}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
@@ -171,9 +171,9 @@
                                 </td>
                             </tr>
                             <tr class="d-flex">
-                                <th class="col-2">Hasło</th>
+                                <th class="col-2">Password</th>
                                 <td class="col-4">
-                                    <input type="text" th:field="*{password}" class="form-control"/>
+                                    <input type="text" th:field="*{password}" class="form-control" readonly/>
                                     <p class="text-danger" th:errors="*{password}"></p>
                                 </td>
                             </tr>
@@ -203,11 +203,19 @@
                                 </td>
                             </tr>
                             <tr class="d-flex">
-                                <th class="col-2">Badania sanitarno epidemiczne</th>
+                                <th class="col-2">Badania sanitarno epidemiologiczne</th>
                                 <td class="col-4">
                                     <select th:field="*{sanitaryEpidemiologicalStudy}" class="form-control">
                                         <option value="true">Tak</option>
                                         <option value="false">Nie</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="d-flex">
+                                <th class="col-2">Uprawnienia</th>
+                                <td class="col-4">
+                                    <select th:field="*{roles}" multiple="multiple" class="form-control">
+                                        <option th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role.name}"></option>
                                     </select>
                                 </td>
                             </tr>

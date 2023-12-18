@@ -112,7 +112,7 @@
             <div class="m-4 p-3 border-dashed view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding">
-                        <h3 class="color-header text-uppercase">Dane pracownika</h3>
+                        <h3 class="color-header text-uppercase">Dane użytkownika</h3>
                     </div>
                     <div class="col d-flex justify-content-end mb-2 noPadding">
                         <a th:href="@{/admin/employee/edit/{id}(id=${employee.id})}" class="btn btn-warning rounded-0 pt-0 pb-0 pr-4 pl-4 mr-2">Edytuj</a>
@@ -151,24 +151,28 @@
                             <td class="col-4" th:text="${employee.email}"></td>
                         </tr>
                         <tr class="d-flex">
-                            <th class="col-2">Hasło</th>
-                            <td class="col-4" th:text="${employee.password}"></td>
+                            <th class="col-2">Password</th>
+                            <td class="col-4">********</td>
                         </tr>
                         <tr class="d-flex">
                             <th class="col-2">Pracownik bar</th>
-                            <td class="col-4" th:text="${employee.barStaff}"></td>
+                            <td class="col-4" th:text="${employee.barStaff} ? 'Tak' : 'Nie'"></td>
                         </tr>
                         <tr class="d-flex">
                             <th class="col-2">Pracownik kuchnia</th>
-                            <td class="col-4" th:text="${employee.kitchenStaff}"></td>
+                            <td class="col-4" th:text="${employee.kitchenStaff} ? 'Tak' : 'Nie'"></td>
                         </tr>
                         <tr class="d-flex">
                             <th class="col-2">Typ umowy</th>
                             <td class="col-4" th:text="${employee.contractType}"></td>
                         </tr>
                         <tr class="d-flex">
-                            <th class="col-2">Badania sanitarno epidemiczne</th>
-                            <td class="col-4" th:text="${employee.sanitaryEpidemiologicalStudy}"></td>
+                            <th class="col-2">Badania sanitarno epidemiologiczne</th>
+                            <td class="col-4" th:text="${employee.sanitaryEpidemiologicalStudy} ? 'Tak' : 'Nie'"></td>
+                        </tr>
+                        <tr class="d-flex">
+                            <th class="col-2">Admin</th>
+                            <td class="col-4" th:text="${employee.isAdmin()} ? 'Tak' : 'Nie'"></td>
                         </tr>
                     </table>
                 </div>

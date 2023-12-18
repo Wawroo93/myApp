@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.dominikwawrzyn.category.Category;
 import pl.dominikwawrzyn.category.CategoryRepository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -58,14 +59,21 @@ public class RecipeKitchenController {
         existingRecipeKitchen.setIngredients(updatedRecipeKitchen.getIngredients());
         existingRecipeKitchen.setPreparationTime(updatedRecipeKitchen.getPreparationTime());
         existingRecipeKitchen.setPreparation(updatedRecipeKitchen.getPreparation());
-        recipeKitchenRepository.save(existingRecipeKitchen);
-        return "redirect:/admin/recipeKitchen/" + existingRecipeKitchen.getCategory().getId();
+        RecipeKitchen savedRecipeKitchen = recipeKitchenRepository.save(existingRecipeKitchen);
+        return "redirect:/admin/recipeKitchen/details/" + savedRecipeKitchen.getId();
     }
     @GetMapping("/details/{id}")
     public String showRecipeKitchenDetails(@PathVariable Long id, Model model) {
         RecipeKitchen recipeKitchen = recipeKitchenRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid RecipeBar Id:" + id));
         model.addAttribute("recipeKitchen", recipeKitchen);
+
+        List<String> ingredients = Arrays.asList(recipeKitchen.getIngredients().split(","));
+        model.addAttribute("ingredients", ingredients);
+
+        List<String> preparationSteps = Arrays.asList(recipeKitchen.getPreparation().split("\\."));
+        model.addAttribute("preparationSteps", preparationSteps);
+
         return "admin/recipeKitchen/adminRecipeKitchenDetails";
     }
     @GetMapping("/delete/{id}")

@@ -114,6 +114,7 @@
                     <div class="row border-bottom border-3">
                         <div class="col"><h3 class="color-header text-uppercase">Szczegóły receptury</h3></div>
                         <div class="col d-flex justify-content-end mb-2">
+                            <a th:href="@{'/admin/recipeBar/edit/' + ${recipeBar.id}}" class="btn btn-warning rounded-0 text-light pt-0 pb-0 pr-4 pl-4">Edytuj</a>
                             <a th:href="@{'/admin/recipeBar/' + ${recipeBar.category.id}}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4 ml-2">Powrót</a>
                         </div>
                     </div>
@@ -135,12 +136,15 @@
                     </div>
                     <div class="row d-flex">
                         <div class="col-5 p-4">
-                            <p th:text="${recipeBar.preparation}"></p>
+                            <ol>
+                                <li th:each="step : ${preparationSteps}" th:text="${step.trim()}"></li>
+                            </ol>
                         </div>
                         <div class="col-2"></div>
-
                         <div class="col-5 p-4">
-                            <p th:text="${recipeBar.ingredients}"></p>
+                            <ul>
+                                <li th:each="ingredient : ${ingredients}" th:text="${ingredient.trim()}"></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

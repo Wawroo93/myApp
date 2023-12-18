@@ -1,6 +1,17 @@
 /*------------------------------*/
 /*---- Main style ----*/
 /*------------------------------*/
+.message-low {
+    background-color: green;
+}
+
+.message-medium {
+    background-color: yellow;
+}
+
+.message-high {
+    background-color: red;
+}
 .highlight {
     font-family: Arial, sans-serif;
     font-weight: bold;
