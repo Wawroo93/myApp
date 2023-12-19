@@ -119,20 +119,12 @@
                 <form th:action="@{'/admin/lossReportItem/add/' + ${lossReport.id}}" th:object="${lossReportItem}" method="post">
                     <input type="hidden" th:field="*{lossReport.id}">
                     <div class="form-group">
-                        <label for="name">Nazwa</label>
-                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
-                    </div>
-                    <div class="form-group">
                         <label for="description">Opis</label>
                         <input type="text" class="form-control" id="description" th:field="*{description}" required>
                     </div>
                     <div class="form-group">
                         <label for="cost">Koszt</label>
                         <input type="number" class="form-control" id="cost" th:field="*{cost}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="eventDate">Data zdarzenia</label>
-                        <input type="date" class="form-control" id="eventDate" th:field="*{eventDate}" required>
                     </div>
                     <div class="form-group">
                         <label for="weight">Waga</label>
@@ -142,10 +134,15 @@
                         <label for="quantity">Ilość</label>
                         <input type="number" class="form-control" id="quantity" th:field="*{quantity}">
                     </div>
+                    <div class="form-group">
+                        <label for="quantity">Dzień</label>
+                        <input type="number" class="form-control" id="day" th:field="*{day}">
+                    </div>
                     <button type="submit" class="btn btn-primary">Dodaj</button>
                 </form>
             </div>
         </div>
+
 
     </div>
 </section>

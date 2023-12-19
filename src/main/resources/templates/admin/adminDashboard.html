@@ -122,19 +122,29 @@
                 </div>
                 <div class="message-panel">
                     <div th:each="message, iterStat : ${messages}" class="card mb-3">
-                        <form th:action="@{/admin/messages/updateReadStatus}" method="post" class="p-3">
+                        <div class="p-3">
                             <div class="d-flex justify-content-between mb-3">
                                 <h3 th:text="${message.author}"></h3>
-                                <h4 th:text="${timestamps[iterStat.index]}"></h4>
+                                <div>
+                                    <h4 th:text="${timestamps[iterStat.index]}" class="d-inline-block"></h4>
+                                </div>
                             </div>
-                            <p class="card-text mb-3 border p-2" th:text="${message.content}"></p>
-                            <div class="form-check mb-1">
-                                <input type="hidden" th:name="messageId" th:value="${message.id}">
-                                <input type="checkbox" class="form-check-input" th:id="'read-' + ${iterStat.index}" th:name="readBy" th:value="${currentEmployee.id}" th:checked="${message.readByEmployees.contains(currentEmployee)}" onchange="this.form.submit()" style="transform: scale(2); " >
-                                <label class="form-check-label ml-2" th:for="'read-' + ${iterStat.index}" th:text="${message.readByEmployees.contains(currentEmployee) ? 'Przeczytane' : 'Nie przeczytane'}"></label>
+                            <p class="card-text mb-2 border p-2" th:text="${message.content}"></p>
+                            <div class="d-flex justify-content-between">
+                                <form th:action="@{/admin/messages/updateReadStatus}" method="post" class="d-inline-block">
+                                    <div class="form-check mb-1">
+                                        <input type="hidden" th:name="messageId" th:value="${message.id}">
+                                        <input type="checkbox" class="form-check-input" th:id="'read-' + ${iterStat.index}" th:name="readBy" th:value="${currentEmployee.id}" th:checked="${message.readByEmployees.contains(currentEmployee)}" onchange="this.form.submit()" style="transform: scale(2); " >
+                                        <label class="form-check-label ml-2" th:for="'read-' + ${iterStat.index}" th:text="${message.readByEmployees.contains(currentEmployee) ? 'Przeczytane' : 'Nie przeczytane'}"></label>
+                                    </div>
+                                </form>
+                                <form th:action="@{/admin/messages/delete/{id}(id=${message.id})}" method="post" class="d-inline-block ml-auto">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button type="submit" class="btn btn-danger ml-2">Usuń wiadomość</button>
+                                </form>
                             </div>
-                        </form>
-                        <form th:action="@{/admin/comment/addComment/{messageId}(messageId=${message.id})}" method="post" class="p-2">
+                        </div>
+                        <form th:action="@{/admin/comment/addComment/{messageId}(messageId=${message.id})}" method="post" class="p-3">
                             <div class="input-group mb-1">
                                 <input type="text" class="form-control" name="content" placeholder="Dodaj komentarz">
                                 <input type="hidden" name="authorId" th:value="${currentEmployee.id}">
@@ -143,15 +153,16 @@
                                 </div>
                             </div>
                         </form>
-                        <div th:each="comment : ${message.comments}" class="p-0.5">
+                        <div th:each="comment : ${message.comments}" class="p-0.5 ml-2">
                             <p th:text="${comment.author.firstName} + ' ' + ${comment.author.lastName} + ' (' + ${#dates.format(comment.timestampAsDate, 'HH:mm')} + '): ' + ${comment.content}"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
+
+    </div>
 </section>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

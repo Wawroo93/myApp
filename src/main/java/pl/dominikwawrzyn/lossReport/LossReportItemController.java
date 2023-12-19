@@ -1,5 +1,7 @@
 package pl.dominikwawrzyn.lossReport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,11 @@ public class LossReportItemController {
         return "admin/lossReport/adminLossReportItemAdd";
     }
     @PostMapping("/add/{reportId}")
-    public String addLossReportItem(@PathVariable Long reportId, @Valid @ModelAttribute LossReportItem lossReportItem, BindingResult bindingResult) {
+    public String addLossReportItem(@PathVariable Long reportId, @Valid @ModelAttribute LossReportItem lossReportItem, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            LossReport lossReport = lossReportRepository.findById(reportId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid report Id:" + reportId));
+            model.addAttribute("lossReport", lossReport);
             return "admin/lossReport/adminLossReportItemAdd";
         }
         LossReport lossReport = lossReportRepository.findById(reportId)
@@ -59,12 +64,11 @@ public class LossReportItemController {
         }
         LossReportItem existingLossReportItem = lossReportItemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + itemId));
-        existingLossReportItem.setName(lossReportItem.getName());
         existingLossReportItem.setDescription(lossReportItem.getDescription());
         existingLossReportItem.setCost(lossReportItem.getCost());
         existingLossReportItem.setWeight(lossReportItem.getWeight());
         existingLossReportItem.setQuantity(lossReportItem.getQuantity());
-        existingLossReportItem.setEventDate(lossReportItem.getEventDate());
+        existingLossReportItem.setDay(lossReportItem.getDay());
         lossReportItemRepository.save(existingLossReportItem);
         return "redirect:/admin/lossReport/" + existingLossReportItem.getLossReport().getId();
     }

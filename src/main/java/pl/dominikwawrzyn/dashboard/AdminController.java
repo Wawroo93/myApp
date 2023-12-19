@@ -32,6 +32,7 @@ public class AdminController {
         List<String> formattedTimestamps = messages.stream()
                 .map(message -> message.getTimestamp().format(formatter))
                 .collect(Collectors.toList());
+
         model.addAttribute("currentEmployee", currentEmployee);
         model.addAttribute("messages", messages);
         model.addAttribute("timestamps", formattedTimestamps);

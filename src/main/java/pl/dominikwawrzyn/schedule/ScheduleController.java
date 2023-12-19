@@ -7,8 +7,13 @@ import pl.dominikwawrzyn.employee.Employee;
 import pl.dominikwawrzyn.employee.EmployeeRepository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,52 +40,11 @@ public class ScheduleController {
         List<Employee> employees = employeeRepository.findAll();
         List<Schedule> schedules = scheduleRepository.findAll();
 
-//        for (Employee employee : employees) {
-//            for (LocalDate day : days) {
-//                if (schedules.stream().noneMatch(s -> s.getDay().equals(day) && s.getEmployee().equals(employee))) {
-//                    Schedule schedule = new Schedule();
-//                    schedule.setDay(day);
-//                    schedule.setEmployee(employee);
-//                    schedule.setStartTime("");
-//                    schedule.setEndTime("");
-//                    schedules.add(schedule);
-//                    scheduleRepository.save(schedule);
-//                }
-//            }
-//        }
         model.addAttribute("days", days);
         model.addAttribute("employees", employees);
         model.addAttribute("schedules", schedules);
         return "admin/schedule/adminScheduleList";
     }
-//    @GetMapping("/listThisMonth")
-//    public String listThisMonth(Model model) {
-//        LocalDate start = LocalDate.now().withDayOfMonth(1);
-//        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
-//        List<LocalDate> days = Stream.iterate(start, date -> date.plusDays(1))
-//                .limit(ChronoUnit.DAYS.between(start, end) + 1)
-//                .collect(Collectors.toList());
-//        List<Employee> employees = employeeRepository.findAll();
-//        List<Schedule> schedules = scheduleRepository.findAll();
-//
-//        for (Employee employee : employees) {
-//            for (LocalDate day : days) {
-//                if (schedules.stream().noneMatch(s -> s.getDay().equals(day) && s.getEmployee().equals(employee))) {
-//                    Schedule schedule = new Schedule();
-//                    schedule.setDay(day);
-//                    schedule.setEmployee(employee);
-//                    schedule.setStartTime("");
-//                    schedule.setEndTime("");
-//                    schedules.add(schedule);
-//                    scheduleRepository.save(schedule);
-//                }
-//            }
-//        }
-//        model.addAttribute("days", days);
-//        model.addAttribute("employees", employees);
-//        model.addAttribute("schedules", schedules);
-//        return "admin/schedule/adminScheduleThisMonth";
-//    }
 
     @GetMapping("/edit")
     public String showEditForm(Model model) {
@@ -108,107 +72,135 @@ public class ScheduleController {
                 }
             }
         }
-
         model.addAttribute("schedules", schedules);
         ScheduleForm scheduleForm = new ScheduleForm();
         scheduleForm.setSchedules(schedules);
         model.addAttribute("scheduleForm", scheduleForm);
         return "admin/schedule/adminScheduleEdit";
     }
-//    @PostMapping("/save")
-//    public String saveSchedule(@ModelAttribute List<Schedule> schedules) {
-//        for (Schedule schedule : schedules) {
-//            if (scheduleRepository.existsById(schedule.getId())) {
-//                Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
-//                        .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
-//                existingSchedule.setStartTime(schedule.getStartTime());
-//                existingSchedule.setEndTime(schedule.getEndTime());
-//                scheduleRepository.saveAndFlush(existingSchedule);
-//            }
-//        }
-//        return "redirect:/admin/schedule/list";
-//    }
-//@PostMapping("/save")
-//public String saveSchedule(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm) {
-//    LocalDate start = LocalDate.now();
-//    LocalDate end = start.plusDays(14);
-//    for (Schedule schedule : scheduleForm.getSchedules()) {
-//        if (scheduleRepository.existsById(schedule.getId())) {
-//            Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
-//            if (!schedule.getDay().isBefore(start) && !schedule.getDay().isAfter(end)) {
-//                // Aktualizuj harmonogram, jeśli jest w zakresie od dzisiaj do 14 dni do przodu
-//                existingSchedule.setStartTime(schedule.getStartTime());
-//                existingSchedule.setEndTime(schedule.getEndTime());
-//            }
-//            scheduleRepository.saveAndFlush(existingSchedule);
-//        } else {
-//            // Zapisz nowy harmonogram do bazy danych, jeśli nie istnieje
-//            scheduleRepository.save(schedule);
-//        }
-//    }
-//    return "redirect:/admin/schedule/list";
-//}
-@PostMapping("/save")
-public String saveSchedule(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm) {
-    for (Schedule schedule : scheduleForm.getSchedules()) {
-        if (schedule.getId() != null && scheduleRepository.existsById(schedule.getId())) {
-            Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
-            existingSchedule.setStartTime(schedule.getStartTime());
-            existingSchedule.setEndTime(schedule.getEndTime());
-            scheduleRepository.saveAndFlush(existingSchedule);
+
+    @PostMapping("/save")
+    public String saveSchedule(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm) {
+        for (Schedule schedule : scheduleForm.getSchedules()) {
+            if (schedule.getId() != null && scheduleRepository.existsById(schedule.getId())) {
+                Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
+                existingSchedule.setStartTime(schedule.getStartTime());
+                existingSchedule.setEndTime(schedule.getEndTime());
+                scheduleRepository.saveAndFlush(existingSchedule);
+            }
         }
+        return "redirect:/admin/schedule/list";
     }
-    return "redirect:/admin/schedule/list";
-}
+    public long calculateHours(Schedule schedule) {
+        if (schedule.getStartTime() != null && !schedule.getStartTime().isEmpty()
+                && schedule.getEndTime() != null && !schedule.getEndTime().isEmpty()) {
+            int startHour = Integer.parseInt(schedule.getStartTime().split(":")[0]);
+            int endHour = Integer.parseInt(schedule.getEndTime().split(":")[0]);
+            return endHour - startHour;
+        }
+        return 0;
+    }
+    @GetMapping("/history")
+    public String showScheduleHistory(Model model) {
+        LocalDate today = LocalDate.now();
+        List<Schedule> allSchedules = scheduleRepository.findAll();
+        List<Schedule> pastSchedules = allSchedules.stream()
+                .filter(schedule -> schedule.getDay().isBefore(today))
+                .collect(Collectors.toList());
 
-//    @PostMapping("/save")
-//    public String saveSchedule(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm) {
-//        for (Schedule schedule : scheduleForm.getSchedules()) {
-//            if (scheduleRepository.existsById(schedule.getId())) {
-//                Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
-//                        .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
-//                existingSchedule.setStartTime(schedule.getStartTime());
-//                existingSchedule.setEndTime(schedule.getEndTime());
-//                scheduleRepository.saveAndFlush(existingSchedule);
-//            }
-//        }
-//        return "redirect:/admin/schedule/list";
-//    }
+        Map<Month, Map<LocalDate, Map<Employee, List<Schedule>>>> sortedSchedulesByMonthAndDayAndEmployee = pastSchedules.stream()
+                .collect(Collectors.groupingBy(schedule -> schedule.getDay().getMonth(),
+                        Collectors.groupingBy(Schedule::getDay,
+                                Collectors.groupingBy(Schedule::getEmployee))))
+                .entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-//    @GetMapping("/editThisMonth")
-//    public String editThisMonth(Model model) {
-//        LocalDate start = LocalDate.now().withDayOfMonth(1);
-//        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
-//        List<LocalDate> days = Stream.iterate(start, date -> date.plusDays(1))
-//                .limit(ChronoUnit.DAYS.between(start, end) + 1)
+        List<Employee> employees = pastSchedules.stream()
+                .map(Schedule::getEmployee)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<Month, Map<Employee, Long>> employeeHoursByMonth = pastSchedules.stream()
+                .collect(Collectors.groupingBy(schedule -> schedule.getDay().getMonth(),
+                        Collectors.groupingBy(Schedule::getEmployee,
+                                Collectors.summingLong(this::calculateHours))));
+        model.addAttribute("employeeHoursByMonth", employeeHoursByMonth);
+
+        model.addAttribute("schedulesByMonthAndDayAndEmployee", sortedSchedulesByMonthAndDayAndEmployee);
+        model.addAttribute("employees", employees);
+        model.addAttribute("schedules", pastSchedules);
+        return "admin/schedule/adminScheduleHistory";
+    }
+
+//    @GetMapping("/history")
+//    public String showScheduleHistory(Model model) {
+//        LocalDate today = LocalDate.now();
+//        List<Schedule> allSchedules = scheduleRepository.findAll();
+//        List<Schedule> pastSchedules = allSchedules.stream()
+//                .filter(schedule -> schedule.getDay().isBefore(today))
 //                .collect(Collectors.toList());
-//        List<Employee> employees = employeeRepository.findAll();
-//        List<Schedule> schedules = scheduleRepository.findAll();
+//
+//        List<LocalDate> days = pastSchedules.stream()
+//                .map(Schedule::getDay)
+//                .distinct()
+//                .sorted()
+//                .collect(Collectors.toList());
+//
+//        List<Employee> employees = pastSchedules.stream()
+//                .map(Schedule::getEmployee)
+//                .distinct()
+//                .collect(Collectors.toList());
 //
 //        model.addAttribute("days", days);
 //        model.addAttribute("employees", employees);
-//        model.addAttribute("schedules", schedules);
-//        ScheduleForm scheduleForm = new ScheduleForm();
-//        scheduleForm.setSchedules(schedules);
-//        model.addAttribute("scheduleForm", scheduleForm);
-//        return "admin/schedule/adminScheduleEditThisMonth";
+//        model.addAttribute("schedules", pastSchedules);
+//        return "admin/schedule/adminScheduleHistory";
 //    }
+    @GetMapping("/history/edit")
+    public String showHistoryEditForm(Model model) {
+        LocalDate today = LocalDate.now();
+        List<Schedule> allSchedules = scheduleRepository.findAll();
+        List<Schedule> pastSchedules = allSchedules.stream()
+                .filter(schedule -> schedule.getDay().isBefore(today))
+                .collect(Collectors.toList());
 
-//    @PostMapping("/saveThisMonth")
-//    public String saveThisMonth(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm) {
-//        for (Schedule schedule : scheduleForm.getSchedules()) {
-//            if (scheduleRepository.existsById(schedule.getId())) {
-//                Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
-//                        .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
-//                existingSchedule.setStartTime(schedule.getStartTime());
-//                existingSchedule.setEndTime(schedule.getEndTime());
-//                scheduleRepository.saveAndFlush(existingSchedule);
-//            }
-//        }
-//        return "redirect:/admin/schedule/listThisMonth";
-//    }
+        List<LocalDate> days = pastSchedules.stream()
+                .map(Schedule::getDay)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
 
+        List<Employee> employees = pastSchedules.stream()
+                .map(Schedule::getEmployee)
+                .distinct()
+                .collect(Collectors.toList());
+
+        model.addAttribute("days", days);
+        model.addAttribute("employees", employees);
+        model.addAttribute("schedules", pastSchedules);
+
+        ScheduleForm scheduleForm = new ScheduleForm();
+        scheduleForm.setSchedules(pastSchedules);
+        model.addAttribute("scheduleForm", scheduleForm);
+
+        return "admin/schedule/adminScheduleHistoryEdit";
+    }
+    @PostMapping("/history/save")
+    public String saveScheduleHistory(@ModelAttribute("scheduleForm") ScheduleForm scheduleForm) {
+        for (Schedule schedule : scheduleForm.getSchedules()) {
+            if (schedule.getId() != null && scheduleRepository.existsById(schedule.getId())) {
+                Schedule existingSchedule = scheduleRepository.findById(schedule.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid schedule Id:" + schedule.getId()));
+                existingSchedule.setStartTime(schedule.getStartTime());
+                existingSchedule.setEndTime(schedule.getEndTime());
+                scheduleRepository.saveAndFlush(existingSchedule);
+            }
+        }
+        return "redirect:/admin/schedule/history";
+    }
 }
 

@@ -18,8 +18,6 @@ public class LossReportItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private String description;
 
     private Double cost;
@@ -28,10 +26,9 @@ public class LossReportItem {
 
     private Integer quantity;
 
-    private LocalDate eventDate;
+    private Integer day;
 
     @ManyToOne
     @JoinColumn(name = "loss_report_id")
     private LossReport lossReport;
-
 }

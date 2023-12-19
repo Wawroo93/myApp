@@ -122,23 +122,21 @@
                 <table class="table border-bottom schedules-content">
                     <thead>
                     <tr>
-                        <th scope="col">Nazwa</th>
                         <th scope="col">Opis</th>
                         <th scope="col">Waga</th>
                         <th scope="col">Ilość</th>
-                        <th scope="col">Data zdarzenia</th>
                         <th scope="col">Koszt</th>
+                        <th scope="col">Dzień</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody class="text-color-lighter">
                     <tr th:each="item : ${lossReportItems}">
-                        <td th:text="${item.name}"></td>
                         <td class="description-cell" th:text="${item.description}"></td>
                         <td th:text="${item.weight != null ? item.weight + ' kg' : ''}"></td>
                         <td th:text="${item.quantity != null ? item.quantity + ' szt' : ''}"></td>
-                        <td th:text="${item.eventDate}"></td>
                         <td th:text="${item.cost}"></td>
+                        <td th:text="${item.day}"></td>
                         <td class="col-11 d-flex align-items-right justify-content-end flex-wrap">
                             <a th:href="@{'/admin/lossReportItem/edit/' + ${item.id}}" class="btn btn-info rounded-0 text-light m-1">Edytuj</a>
                             <form th:action="@{'/admin/lossReportItem/delete/' + ${item.id}}" method="post">

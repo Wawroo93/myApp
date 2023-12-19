@@ -16,10 +16,12 @@ import java.util.Optional;
 public class MessageController {
     private final MessageRepository messageRepository;
     private final EmployeeRepository employeeRepository;
+    private final CommentRepository commentRepository;
 
-    public MessageController(MessageRepository messageRepository, EmployeeRepository employeeRepository) {
+    public MessageController(MessageRepository messageRepository, EmployeeRepository employeeRepository, CommentRepository commentRepository) {
         this.messageRepository = messageRepository;
         this.employeeRepository = employeeRepository;
+        this.commentRepository = commentRepository;
     }
     @GetMapping("/add")
     public String showAddMessageForm(Model model) {
@@ -58,6 +60,19 @@ public class MessageController {
             redirectAttributes.addFlashAttribute("success", "Status wiadomości został zaktualizowany.");
         } else {
             redirectAttributes.addFlashAttribute("error", "Nie można znaleźć wiadomości o podanym ID lub aktualnie zalogowanego użytkownika.");
+        }
+        return "redirect:/admin/dashboard";
+    }
+    @PostMapping("/delete/{id}")
+    public String deleteMessage(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Message message = messageRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid message Id:" + id));
+            commentRepository.deleteAll(message.getComments());
+            messageRepository.delete(message);
+            redirectAttributes.addFlashAttribute("success", "Wiadomość została usunięta pomyślnie.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Nie można usunąć wiadomości. Spróbuj ponownie.");
         }
         return "redirect:/admin/dashboard";
     }

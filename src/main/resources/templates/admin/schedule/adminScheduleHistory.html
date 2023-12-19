@@ -110,29 +110,72 @@
 
         <div class="m-4 p-3 width-medium">
             <div class="dashboard-content border-dashed p-3 m-4 view-height">
-                <div class="row border-bottom border-3 p-1 m-1"><div class="col noPadding d-flex justify-content-between align-items-center">
-                    <h3 class="color-header text-uppercase">Grafik aktualny miesiąć</h3>
-                    <a href="/admin/schedule/editThisMonth" class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>
+                <div class="row border-bottom border-3 p-1 m-1">
+                    <div class="col noPadding d-flex justify-content-between align-items-center">
+                        <h3 class="color-header text-uppercase">Historia Grafiku</h3>
+                        <div>
+                            <a href="/admin/schedule/history/edit" class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>
+                            <a href="/admin/schedule/list" class="btn btn-secondary">Powrót</a>
+                        </div>
+                    </div>
                 </div>
+                <div th:each="monthEntry : ${schedulesByMonthAndDayAndEmployee}">
+                    <h4 th:text="${monthEntry.key}"></h4>
+                    <table class="table border-bottom schedules-content">
+                        <thead>
+                        <tr>
+                            <th scope="col">Dzień</th>
+                            <th th:each="employee : ${employees}" th:text="${#strings.substring(employee.firstName, 0, 1) + '.' + employee.lastName}"></th>
+                        </tr>
+                        <tr>
+                            <td>Suma godzin</td>
+                            <td th:each="employee : ${employees}">
+                                <span th:text="${employeeHoursByMonth.get(monthEntry.key).get(employee)}"></span>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody class="text-color-lighter">
+                        <tr th:each="dayEntry : ${monthEntry.value}">
+                            <td th:text="${dayEntry.key}" th:style="${dayEntry.key.dayOfWeek == T(java.time.DayOfWeek).MONDAY ? 'color: red' : ''}"></td>
+                            <td th:each="employee : ${employees}">
+                                <span th:each="schedule : ${dayEntry.value.get(employee)}" th:if="${schedule != null}" th:text="${schedule.startTime} + ' - ' + ${schedule.endTime}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <table class="table border-bottom schedules-content">
-                    <thead>
-                    <tr>
-                        <th scope="col">Dzień</th>
-                        <th th:each="employee : ${employees}" th:text="${#strings.substring(employee.firstName, 0, 1) + '.' + employee.lastName}"></th>
-                    </tr>
-                    </thead>
-                    <tbody class="text-color-lighter">
-                    <tr th:each="day : ${days}">
-                        <td th:text="${day}" th:style="${day.dayOfWeek == T(java.time.DayOfWeek).MONDAY ? 'color: red' : ''}"></td>
-                        <td th:each="employee : ${employees}">
-                            <span th:each="schedule : ${schedules}" th:if="${schedule.day == (day) && schedule.employee == (employee)}" th:text="${schedule.startTime} + ' - ' + ${schedule.endTime}"></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
+
+<!--        <div class="m-4 p-3 width-medium">-->
+<!--            <div class="dashboard-content border-dashed p-3 m-4 view-height">-->
+<!--                <div class="row border-bottom border-3 p-1 m-1">-->
+<!--                    <div class="col noPadding d-flex justify-content-between align-items-center">-->
+<!--                        <h3 class="color-header text-uppercase">Historia Grafiku</h3>-->
+<!--                        <div>-->
+<!--                            <a href="/admin/schedule/history/edit" class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>-->
+<!--                            <a href="/admin/schedule/list" class="btn btn-secondary">Powrót</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <table class="table border-bottom schedules-content">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th scope="col">Dzień</th>-->
+<!--                        <th th:each="employee : ${employees}" th:text="${#strings.substring(employee.firstName, 0, 1) + '.' + employee.lastName}"></th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody class="text-color-lighter">-->
+<!--                    <tr th:each="day : ${days}">-->
+<!--                        <td th:text="${day}" th:style="${day.dayOfWeek == T(java.time.DayOfWeek).MONDAY ? 'color: red' : ''}"></td>-->
+<!--                        <td th:each="employee : ${employees}">-->
+<!--                            <span th:each="schedule : ${schedules}" th:if="${schedule.day == (day) && schedule.employee == (employee)}" th:text="${schedule.startTime} + ' - ' + ${schedule.endTime}"></span>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
 
     </div>
 </section>

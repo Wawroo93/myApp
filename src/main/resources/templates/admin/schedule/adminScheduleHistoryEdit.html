@@ -112,14 +112,14 @@
             <div class="dashboard-content border-dashed p-3 m-4 view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding d-flex justify-content-between align-items-center">
-                        <h3 class="color-header text-uppercase">Grafik</h3>
+                        <h3 class="color-header text-uppercase">Historia Grafiku</h3>
                         <div>
-                            <button type="submit" form="scheduleFormThisMonth" class="btn btn-primary mr-2">Zapisz zmiany</button>
-                            <a href="/admin/schedule/listThisMonth" class="btn btn-secondary ">Powrót</a>
+                            <button type="submit" form="scheduleForm" class="btn btn-primary mr-2">Zapisz zmiany</button>
+                            <a href="/admin/schedule/history" class="btn btn-secondary ">Powrót</a>
                         </div>
                     </div>
                 </div>
-                <form id="scheduleFormThisMonth" th:action="@{/admin/schedule/saveThisMonth}" method="post" th:object="${scheduleForm}">
+                <form id="scheduleForm" th:action="@{/admin/schedule/history/save}" method="post" th:object="${scheduleForm}">
                     <table class="table border-bottom schedules-content">
                         <thead>
                         <tr>

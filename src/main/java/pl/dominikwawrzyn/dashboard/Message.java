@@ -20,7 +20,7 @@ import java.util.List;
 public class Message {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String content;
@@ -42,5 +42,4 @@ public class Message {
 
     @OneToMany(mappedBy = "message")
     private List<Comment> comments = new ArrayList<>();
-
 }
