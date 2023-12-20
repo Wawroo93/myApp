@@ -34,7 +34,6 @@ public class LoginController {
             throw new IllegalArgumentException("Niepoprawne hasło");
         }
 
-        // Sprawdź rolę użytkownika
         boolean isAdmin = employee.isAdmin();
 
         if (isAdmin) {

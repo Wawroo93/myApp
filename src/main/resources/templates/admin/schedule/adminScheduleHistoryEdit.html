@@ -22,8 +22,11 @@
             My <span>App</span>
         </a>
         <div class="d-flex justify-content-around">
-            <h4 class="text-light mr-3">Imię</h4>
+            <h4 class="text-light mr-3" th:text="${username}"></h4>
             <div class="circle-div text-center"><i class="fas fa-user icon-user"></i></div>
+            <form th:action="@{/logout}" method="post" class="ml-3">
+                <input type="submit" value="Wyloguj" class="btn btn-primary"/>
+            </form>
         </div>
     </nav>
 </header>
@@ -33,7 +36,7 @@
         <ul class="nav flex-column long-bg">
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/admin/dashboard}">
-                    <span>Pulpit</span>
+                    <span>Aktualności</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
@@ -94,7 +97,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/app-edit-password.html}">
+                <a class="nav-link disabled" th:href="@{/admin/changePassword}">
                     <span>Zmień hasło</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
@@ -108,11 +111,12 @@
         </ul>
 
 
+
         <div class="m-4 p-3 width-medium">
             <div class="dashboard-content border-dashed p-3 m-4 view-height">
                 <div class="row border-bottom border-3 p-1 m-1">
                     <div class="col noPadding d-flex justify-content-between align-items-center">
-                        <h3 class="color-header text-uppercase">Historia Grafiku</h3>
+                        <h3 class="color-header text-uppercase">Edycja Historii Grafiku</h3>
                         <div>
                             <button type="submit" form="scheduleForm" class="btn btn-primary mr-2">Zapisz zmiany</button>
                             <a href="/admin/schedule/history" class="btn btn-secondary ">Powrót</a>
@@ -131,7 +135,11 @@
                         </thead>
                         <tbody class="text-color-lighter">
                         <tr th:each="day : ${days}">
-                            <td th:text="${day}"></td>
+                            <td>
+                                <span th:text="${day}"></span>
+                                <a th:href="@{'/admin/schedule/history/delete?date=' + ${day}}"
+                                   class="btn btn-danger">Usuń</a>
+                            </td>
                             <td th:each="employee : ${employees}">
                                 <div th:each="schedule, i : ${schedules}"
                                      th:if="${schedule.day == (day) && schedule.employee == (employee)}">

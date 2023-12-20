@@ -49,14 +49,7 @@ public class ProductsBarController {
         productsBarRepository.save(productsBar);
         return "redirect:/admin/category/listProductsBar";
     }
-//    @PostMapping("/updateName/{productId}")
-//    public String updateName(@PathVariable Long productId, @RequestParam("name") String name) {
-//        ProductsBar productsBar = productsBarRepository.findById(productId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + productId));
-//        productsBar.setName(name);
-//        productsBarRepository.save(productsBar);
-//        return "redirect:/admin/category/listProductsBar";
-//    }
+
 
     @PostMapping("/delete/{productId}")
     public String deleteProductBar(@PathVariable Long productId) {

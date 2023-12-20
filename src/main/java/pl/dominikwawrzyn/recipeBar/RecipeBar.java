@@ -24,10 +24,6 @@ public class RecipeBar {
     private String preparation;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
-
-    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

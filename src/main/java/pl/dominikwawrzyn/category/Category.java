@@ -1,7 +1,5 @@
 package pl.dominikwawrzyn.category;
 
-
-
 import lombok.*;
 import pl.dominikwawrzyn.productsBar.ProductsBar;
 import pl.dominikwawrzyn.productsKitchen.ProductsKitchen;

@@ -27,7 +27,7 @@ public class UserScheduleController {
     @GetMapping("/list")
     public String list(Model model) {
         LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(14);
+        LocalDate end = start.plusDays(21);
         List<LocalDate> days = Stream.iterate(start, date -> date.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(start, end) + 1)
                 .collect(Collectors.toList());

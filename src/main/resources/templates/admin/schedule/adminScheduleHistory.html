@@ -22,8 +22,11 @@
             My <span>App</span>
         </a>
         <div class="d-flex justify-content-around">
-            <h4 class="text-light mr-3">Imię</h4>
+            <h4 class="text-light mr-3" th:text="${username}"></h4>
             <div class="circle-div text-center"><i class="fas fa-user icon-user"></i></div>
+            <form th:action="@{/logout}" method="post" class="ml-3">
+                <input type="submit" value="Wyloguj" class="btn btn-primary"/>
+            </form>
         </div>
     </nav>
 </header>
@@ -33,7 +36,7 @@
         <ul class="nav flex-column long-bg">
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/admin/dashboard}">
-                    <span>Pulpit</span>
+                    <span>Aktualności</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
@@ -94,7 +97,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/app-edit-password.html}">
+                <a class="nav-link disabled" th:href="@{/admin/changePassword}">
                     <span>Zmień hasło</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
@@ -147,35 +150,6 @@
             </div>
         </div>
 
-<!--        <div class="m-4 p-3 width-medium">-->
-<!--            <div class="dashboard-content border-dashed p-3 m-4 view-height">-->
-<!--                <div class="row border-bottom border-3 p-1 m-1">-->
-<!--                    <div class="col noPadding d-flex justify-content-between align-items-center">-->
-<!--                        <h3 class="color-header text-uppercase">Historia Grafiku</h3>-->
-<!--                        <div>-->
-<!--                            <a href="/admin/schedule/history/edit" class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>-->
-<!--                            <a href="/admin/schedule/list" class="btn btn-secondary">Powrót</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <table class="table border-bottom schedules-content">-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th scope="col">Dzień</th>-->
-<!--                        <th th:each="employee : ${employees}" th:text="${#strings.substring(employee.firstName, 0, 1) + '.' + employee.lastName}"></th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody class="text-color-lighter">-->
-<!--                    <tr th:each="day : ${days}">-->
-<!--                        <td th:text="${day}" th:style="${day.dayOfWeek == T(java.time.DayOfWeek).MONDAY ? 'color: red' : ''}"></td>-->
-<!--                        <td th:each="employee : ${employees}">-->
-<!--                            <span th:each="schedule : ${schedules}" th:if="${schedule.day == (day) && schedule.employee == (employee)}" th:text="${schedule.startTime} + ' - ' + ${schedule.endTime}"></span>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
 
     </div>
 </section>

@@ -40,7 +40,7 @@ public class LossReportItemController {
         lossReportItemRepository.save(lossReportItem);
         return "redirect:/admin/lossReport/" + reportId;
     }
-    @DeleteMapping("/delete/{itemId}")
+    @PostMapping("/delete/{itemId}")
     public String deleteLossReportItem(@PathVariable Long itemId) {
         LossReportItem lossReportItem = lossReportItemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + itemId));

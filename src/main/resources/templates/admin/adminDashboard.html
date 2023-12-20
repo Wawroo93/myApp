@@ -143,6 +143,12 @@
                                     <button type="submit" class="btn btn-danger ml-2">Usuń wiadomość</button>
                                 </form>
                             </div>
+                            <details>
+                                <summary>Przeczytane przez</summary>
+                                <ul class="no-bullets" th:each="employee : ${message.readByEmployees}">
+                                    <li th:text="${employee.firstName} + ' ' + ${employee.lastName}"></li>
+                                </ul>
+                            </details>
                         </div>
                         <form th:action="@{/admin/comment/addComment/{messageId}(messageId=${message.id})}" method="post" class="p-3">
                             <div class="input-group mb-1">

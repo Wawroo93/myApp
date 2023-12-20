@@ -18,6 +18,7 @@ import pl.dominikwawrzyn.schedule.ScheduleRepository;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.ErrorManager;
 
@@ -32,7 +33,6 @@ public class EmployeeController {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
     @Autowired
     public EmployeeController(EmployeeRepository employeeRepository, ScheduleRepository scheduleRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
@@ -72,7 +72,6 @@ public class EmployeeController {
     @PostMapping("/edit/{id}")
     public String updateEmployee(@PathVariable Long id, @Valid Employee employee, BindingResult result) {
         if (result.hasErrors()) {
-            logger.error("Validation errors occurred while updating employee: {}", result.getAllErrors());
             return "admin/employee/adminEmployeeEdit";
         }
         employeeRepository.findById(id)
@@ -104,17 +103,20 @@ public class EmployeeController {
         return "redirect:/admin/employee/details/" + id;
     }
 
-
     @GetMapping("/add")
     public String showAdd(Model model) {
         model.addAttribute("employee", new Employee());
         return "admin/employee/adminEmployeeAdd";
     }
 
-
     @PostMapping("/add")
-    public String addEmployee(@Valid Employee employee, BindingResult result) {
+    public String addEmployee(@Valid Employee employee, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            return "admin/employee/adminEmployeeAdd";
+        }
+        Optional<Employee> existingEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if (existingEmployee.isPresent()) {
+            model.addAttribute("emailExists", "taki email juz istnieje");
             return "admin/employee/adminEmployeeAdd";
         }
         String encodedPassword = passwordEncoder.encode(employee.getPassword());
@@ -123,7 +125,12 @@ public class EmployeeController {
         Role userRole = roleRepository.findByName("ROLE_USER");
         employee.getRoles().add(userRole);
 
-        employeeRepository.save(employee);
+        try {
+            employeeRepository.save(employee);
+        } catch (Exception e) {
+            model.addAttribute("saveError", "Error occurred while saving the employee");
+            return "admin/employee/adminEmployeeAdd";
+        }
         return "redirect:/admin/employee/list";
     }
 

@@ -23,27 +23,27 @@ public class MessageController {
         this.employeeRepository = employeeRepository;
         this.commentRepository = commentRepository;
     }
+
     @GetMapping("/add")
     public String showAddMessageForm(Model model) {
         model.addAttribute("message", new Message());
         return "admin/messages/adminMessageAdd";
     }
+
     @PostMapping("/add")
-    public String addMessage(@ModelAttribute Message message, RedirectAttributes redirectAttributes) {
+    public String addMessage(@ModelAttribute Message message) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         Employee currentEmployee = employeeRepository.findByEmail(currentUserName).orElse(null);
         if (currentEmployee != null) {
             String fullName = currentEmployee.getFirstName() + " " + currentEmployee.getLastName();
             message.setAuthor(fullName);
             messageRepository.save(message);
-            redirectAttributes.addFlashAttribute("success", "Wiadomość została dodana pomyślnie.");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Nie można znaleźć aktualnie zalogowanego użytkownika.");
         }
         return "redirect:/admin/dashboard";
     }
+
     @PostMapping("/updateReadStatus")
-    public String updateReadStatus(@RequestParam Long messageId, @RequestParam(required = false) List<Long> readBy, RedirectAttributes redirectAttributes) {
+    public String updateReadStatus(@RequestParam Long messageId, @RequestParam(required = false) List<Long> readBy) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         Employee currentEmployee = employeeRepository.findByEmail(currentUserName).orElse(null);
         Optional<Message> optionalMessage = messageRepository.findById(messageId);
@@ -57,23 +57,16 @@ public class MessageController {
                 message.getReadByEmployees().remove(currentEmployee);
             }
             messageRepository.save(message);
-            redirectAttributes.addFlashAttribute("success", "Status wiadomości został zaktualizowany.");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Nie można znaleźć wiadomości o podanym ID lub aktualnie zalogowanego użytkownika.");
         }
         return "redirect:/admin/dashboard";
     }
+
     @PostMapping("/delete/{id}")
-    public String deleteMessage(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        try {
-            Message message = messageRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid message Id:" + id));
-            commentRepository.deleteAll(message.getComments());
-            messageRepository.delete(message);
-            redirectAttributes.addFlashAttribute("success", "Wiadomość została usunięta pomyślnie.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Nie można usunąć wiadomości. Spróbuj ponownie.");
-        }
+    public String deleteMessage(@PathVariable Long id) {
+        Message message = messageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message Id:" + id));
+        commentRepository.deleteAll(message.getComments());
+        messageRepository.delete(message);
         return "redirect:/admin/dashboard";
     }
 }

@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ProductsKitchenRepository extends JpaRepository<ProductsKitchen, Long> {
+
+    List<ProductsKitchen> findByCategoryId(Long categoryId);
     List<ProductsKitchen> findByCategory(Category category);
 }

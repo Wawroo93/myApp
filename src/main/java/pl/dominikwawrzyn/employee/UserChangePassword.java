@@ -1,6 +1,5 @@
 package pl.dominikwawrzyn.employee;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,27 +8,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.dominikwawrzyn.employee.Employee;
-import pl.dominikwawrzyn.employee.EmployeeRepository;
 
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/admin")
-public class ChangePassword {
+@RequestMapping("/user")
+public class UserChangePassword {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ChangePassword(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
+    public UserChangePassword(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     @GetMapping("/changePassword")
     public String showChangePasswordForm(Model model, Principal principal) {
         Employee employee = employeeRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new IllegalArgumentException("Niepoprawny email użytkownika: " + principal.getName()));
         model.addAttribute("employee", employee);
-        return "admin/adminChangePassword";
+        return "user/userChangePassword";
     }
 
     @PostMapping("/changePassword")
@@ -42,17 +40,17 @@ public class ChangePassword {
 
         if (!passwordEncoder.matches(oldPassword, employee.getPassword())) {
             redirectAttributes.addFlashAttribute("error", "Stare hasło jest niepoprawne");
-            return "redirect:/admin/changePassword";
+            return "redirect:/user/changePassword";
         }
 
         if (!newPassword.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Nowe hasło i potwierdzenie hasła nie są takie same");
-            return "redirect:/admin/changePassword";
+            return "redirect:/user/changePassword";
         }
 
         employee.setPassword(passwordEncoder.encode(newPassword));
         employeeRepository.save(employee);
 
-        return "redirect:/admin/dashboard";
+        return "redirect:/user/dashboard";
     }
 }

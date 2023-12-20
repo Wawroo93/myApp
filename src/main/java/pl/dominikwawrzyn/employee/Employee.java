@@ -52,6 +52,7 @@ public class Employee {
     @NotBlank(message = "Miasto nie może być puste")
     private String city;
 
+    @Column(unique = true)
     @NotBlank(message = "Email nie może być pusty")
     @Email(message = "Email musi być poprawny")
     private String email;
@@ -83,11 +84,5 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     private List<Schedule> schedules;
-
-    @OneToMany(mappedBy = "employee")
-    private List<RecipeBar> recipesBar;
-
-    @OneToMany(mappedBy = "employee")
-    private List<RecipeKitchen> recipesKitchen;
 
 }

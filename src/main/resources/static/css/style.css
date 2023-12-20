@@ -12,6 +12,10 @@
 .message-high {
     background-color: red;
 }
+ul.no-bullets {
+    margin-bottom: 1px;
+    list-style: none;
+}
 .highlight {
     font-family: Arial, sans-serif;
     font-weight: bold;

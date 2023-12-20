@@ -1,5 +1,6 @@
 package pl.dominikwawrzyn.schedule;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -7,8 +8,8 @@ import pl.dominikwawrzyn.employee.Employee;
 import pl.dominikwawrzyn.employee.EmployeeRepository;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -33,7 +34,7 @@ public class ScheduleController {
     @GetMapping("/list")
     public String list(Model model) {
         LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(14);
+        LocalDate end = start.plusDays(21);
         List<LocalDate> days = Stream.iterate(start, date -> date.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(start, end) + 1)
                 .collect(Collectors.toList());
@@ -51,7 +52,7 @@ public class ScheduleController {
         List<Employee> employees = employeeRepository.findAll();
         model.addAttribute("employees", employees);
         LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(14);
+        LocalDate end = start.plusDays(21);
         List<LocalDate> days = Stream.iterate(start, date -> date.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(start, end) + 1)
                 .collect(Collectors.toList());
@@ -136,30 +137,6 @@ public class ScheduleController {
         return "admin/schedule/adminScheduleHistory";
     }
 
-//    @GetMapping("/history")
-//    public String showScheduleHistory(Model model) {
-//        LocalDate today = LocalDate.now();
-//        List<Schedule> allSchedules = scheduleRepository.findAll();
-//        List<Schedule> pastSchedules = allSchedules.stream()
-//                .filter(schedule -> schedule.getDay().isBefore(today))
-//                .collect(Collectors.toList());
-//
-//        List<LocalDate> days = pastSchedules.stream()
-//                .map(Schedule::getDay)
-//                .distinct()
-//                .sorted()
-//                .collect(Collectors.toList());
-//
-//        List<Employee> employees = pastSchedules.stream()
-//                .map(Schedule::getEmployee)
-//                .distinct()
-//                .collect(Collectors.toList());
-//
-//        model.addAttribute("days", days);
-//        model.addAttribute("employees", employees);
-//        model.addAttribute("schedules", pastSchedules);
-//        return "admin/schedule/adminScheduleHistory";
-//    }
     @GetMapping("/history/edit")
     public String showHistoryEditForm(Model model) {
         LocalDate today = LocalDate.now();
@@ -173,6 +150,7 @@ public class ScheduleController {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
+        Collections.reverse(days);
 
         List<Employee> employees = pastSchedules.stream()
                 .map(Schedule::getEmployee)
@@ -200,6 +178,25 @@ public class ScheduleController {
                 scheduleRepository.saveAndFlush(existingSchedule);
             }
         }
+        return "redirect:/admin/schedule/history";
+    }
+    @GetMapping("/history/delete")
+    public String deleteScheduleByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, Model model) {
+        List<Schedule> schedules = scheduleRepository.findAllByDay(date);
+        scheduleRepository.deleteAll(schedules);
+
+        List<LocalDate> days = scheduleRepository.findAll().stream()
+                .map(Schedule::getDay)
+                .distinct()
+                .sorted()
+                .toList();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        List<String> formattedDays = days.stream()
+                .map(day -> day.format(formatter))
+                .collect(Collectors.toList());
+
+        model.addAttribute("days", formattedDays);
         return "redirect:/admin/schedule/history";
     }
 }

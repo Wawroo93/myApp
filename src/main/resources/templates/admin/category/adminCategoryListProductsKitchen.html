@@ -22,8 +22,11 @@
             My <span>App</span>
         </a>
         <div class="d-flex justify-content-around">
-            <h4 class="text-light mr-3">Imię</h4>
+            <h4 class="text-light mr-3" th:text="${username}"></h4>
             <div class="circle-div text-center"><i class="fas fa-user icon-user"></i></div>
+            <form th:action="@{/logout}" method="post" class="ml-3">
+                <input type="submit" value="Wyloguj" class="btn btn-primary"/>
+            </form>
         </div>
     </nav>
 </header>
@@ -33,7 +36,7 @@
         <ul class="nav flex-column long-bg">
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/admin/dashboard}">
-                    <span>Pulpit</span>
+                    <span>Aktualności</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
             </li>
@@ -94,7 +97,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" th:href="@{/app-edit-password.html}">
+                <a class="nav-link disabled" th:href="@{/admin/changePassword}">
                     <span>Zmień hasło</span>
                     <i class="fas fa-angle-right"></i>
                 </a>
@@ -174,6 +177,16 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+<script>
+    window.onload = function() {
+        if (sessionStorage.getItem("scrollPosition") != null) {
+            window.scrollTo(0, sessionStorage.getItem("scrollPosition"));
+        }
+    }
+    window.onbeforeunload = function() {
+        sessionStorage.setItem("scrollPosition", window.scrollY);
+    }
+</script>
 
 </body>
 </html>

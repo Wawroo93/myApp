@@ -16,7 +16,6 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final EmployeeRepository employeeRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
     public CommentController(MessageRepository messageRepository, CommentRepository commentRepository, EmployeeRepository employeeRepository) {
@@ -27,18 +26,13 @@ public class CommentController {
 
     @PostMapping("/addComment/{messageId}")
     public String addComment(@PathVariable Long messageId, @ModelAttribute Comment comment, @RequestParam Long authorId) {
-        try {
-            Message message = messageRepository.findById(messageId)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Message Id:" + messageId));
-            Employee author = employeeRepository.findById(authorId)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Employee Id:" + authorId));
-            comment.setMessage(message);
-            comment.setAuthor(author);
-            commentRepository.save(comment);
-            logger.info("Comment added successfully");
-        } catch (Exception e) {
-            logger.error("Error occurred while adding comment", e);
-        }
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Message Id:" + messageId));
+        Employee author = employeeRepository.findById(authorId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Employee Id:" + authorId));
+        comment.setMessage(message);
+        comment.setAuthor(author);
+        commentRepository.save(comment);
         return "redirect:/admin/dashboard";
     }
 }
